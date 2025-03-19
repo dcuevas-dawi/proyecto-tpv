@@ -48,6 +48,27 @@
                                 {{ __('Salir') }}
                             </x-dropdown-link>
                         </form>
+
+                        <form method="POST" action="{{ route('employee.logout') }}">
+                            @csrf
+                            <x-dropdown-link :href="route('logout')"
+                                             onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                {{ __('Cambiar empleado') }}
+                            </x-dropdown-link>
+                        </form>
+                        {{-- Botón solo visible para el dueño para crear empleados --}}
+                        @if(session('employee_role') == 1)
+                            <form method="Get" action="{{ route('employee.create') }}">
+                                @csrf
+                                <x-dropdown-link :href="route('logout')"
+                                                 onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                    {{ __('Crear empleado') }}
+                                </x-dropdown-link>
+                            </form>
+                        @endif
+
                     </x-slot>
                 </x-dropdown>
             </div>
@@ -96,5 +117,26 @@
                 </form>
             </div>
         </div>
+
+
     </div>
+    @if(session('employee_name')||true)
+        <div class="text-center text-sm text-gray-600 dark:text-gray-400">
+            Empleado actual: {{ session('employee_name') }}
+            @switch(session('employee_role'))
+                @case(1)
+                     - Dueño
+                    @break
+                @case(2)
+                     - Encargado
+                    @break
+                @case(3)
+                     - Empleado
+                    @break
+                @default
+
+            @endswitch
+        </div>
+    @endif
+
 </nav>

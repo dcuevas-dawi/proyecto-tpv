@@ -1,0 +1,37 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Identificación de empleado
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-md mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
+                <form method="POST" action="{{ route('employee.authenticate') }}">
+                    @csrf
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Selecciona empleado</label>
+                        <select name="employee_id" class="block w-full border-gray-300 rounded-md" required>
+                            <option value="">Selecciona...</option>
+                            @foreach($employees as $employee)
+                                <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">PIN</label>
+                        <input type="password" name="employee_pin" class="block w-full border-gray-300 rounded-md" required>
+                    </div>
+
+                    <div class="mt-6">
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md">
+                            Acceder
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</x-app-layout>
