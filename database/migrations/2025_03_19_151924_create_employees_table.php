@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('user_id'); // Owner of this employee
+            $table->unsignedInteger('user_id'); // Employee's stablishment
             $table->string('name');
             $table->string('pin');
             $table->tinyInteger('role'); // 1 = Owner, 2 = Manager, 3 = Employee

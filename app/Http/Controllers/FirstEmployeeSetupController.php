@@ -7,7 +7,7 @@ use App\Models\Employee;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class FirstEmployeeSetupController extends Controller
+class FirstEmployeeSetupController extends Controller  // Clase para crear el primer usuario: el Dueño, es algo diferente al de crear un empleado
 {
     public function showOwnerForm()
     {
@@ -18,7 +18,13 @@ class FirstEmployeeSetupController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'pin' => 'required|string|min:4|max:10|confirmed',
+            'pin' => 'required|digits:6|confirmed',
+        ], [
+            'name.required' => 'El nombre es obligatorio.',
+            'name.max' => 'El nombre no puede tener más de 255 caracteres.',
+            'pin.required' => 'El PIN es obligatorio.',
+            'pin.digits' => 'El PIN debe tener exactamente 6 dígitos.',
+            'pin.confirmed' => 'La confirmación del PIN no coincide.',
         ]);
 
         $employee = Employee::create([
