@@ -6,6 +6,7 @@ use App\Http\Controllers\EmployeeLoginController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\FirstEmployeeSetupController;
 use App\Http\Controllers\TableController;
+use App\Http\Controllers\OrderController;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -48,8 +49,16 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/employee/login', [EmployeeLoginController::class, 'login'])->name('employee.authenticate');
     Route::get('/employee/login', [EmployeeLoginController::class, 'showLoginForm'])->name('employee.login');
 
-    Route::get('tables/select/{id}', [TableController::class, 'select'])->name('tables.select');
     Route::resource('tables', TableController::class); // Resource manage all the CRUD routes for the TableController
+
+    Route::get('/tables/{number}', [TableController::class, 'show'])->name('tables.show');
+    Route::post('/tables/{tableId}/close-order', [OrderController::class, 'closeOrder'])->name('tables.closeOrder');
+
+    Route::post('/orders/create/{table}', [OrderController::class, 'create'])->name('orders.create');
+    Route::get('/orders/{orderId}/edit', [OrderController::class, 'edit'])->name('orders.edit');
+    Route::post('/orders/{orderId}/add-product', [OrderController::class, 'addProduct'])->name('orders.addProduct');
+
+
 });
 
 

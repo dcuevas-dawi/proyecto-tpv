@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Table;
 use Illuminate\Http\Request;
+use App\Models\Product;
+use App\Models\Order;
 
 class TableController extends Controller
 {
@@ -13,14 +15,28 @@ class TableController extends Controller
         return view('tables.index', compact('tables'));
     }
 
-    public function select($id)
+    public function show($number)
     {
-        $table = Table::find($id);
+        // Buscar la mesa
+        $table = Table::where('number', $number)
+            ->where('user_id', auth()->user()->id) // Asegura que la mesa pertenece al establecimiento del usuario
+            ->firstOrFail();
 
-        if ($table) {
-            return redirect()->route('orders.create', ['table_id' => $table->id]);
+        // Si no se encuentra la mesa o la mesa no pertenece al establecimiento, aborta con error 403
+        if (!$table) {
+            abort(403, 'No tienes permiso para acceder a esta mesa');
         }
 
-        return back()->with('error', 'La mesa no existe.');
+        // Buscar el pedido abierto de la mesa (si existe)
+        $order = $table->orders()->open()->first();
+
+        // Si no hay un pedido abierto, podemos crear uno nuevo
+
+
+        // Obtener todos los productos disponibles para agregar al pedido
+        $products = Product::where('user_id', auth()->user()->id)->get();
+
+        // Retornar la vista con la mesa, el pedido y los productos
+        return view('tables.show', compact('table', 'order', 'products', 'table'));
     }
 }

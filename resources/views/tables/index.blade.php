@@ -14,7 +14,7 @@
                             </span>
                         </p>
                         <!-- Botón para seleccionar la mesa -->
-                                <a href="{{ route('tables.select', $table->id) }}" class="btn-select w-fit self-end bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md transition duration-300 ease-in-out group-hover:bg-blue-700">
+                                <a href="{{ route('tables.show', $table->number)}}" class="btn-select w-fit self-end bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md transition duration-300 ease-in-out group-hover:bg-blue-700">
                                     Seleccionar
                                 </a>
                     </div>
