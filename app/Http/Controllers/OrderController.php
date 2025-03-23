@@ -17,6 +17,10 @@ class OrderController extends Controller
             return redirect()->back()->with('error', 'La mesa no existe.');
         }
 
+        // Cambiar el estado de la mesa a "ocupada"
+        $table->status = 1; // 1 = ocupada
+        $table->save();
+
         $order = $table->orders()->where('status', 'abierto')->first();
 
         if (!$order) {
@@ -94,6 +98,10 @@ class OrderController extends Controller
         // Obtener la mesa y el pedido asociado
         $table = Table::findOrFail($tableId);
         $order = $table->orders()->open()->first();
+
+        // Cambiar el estado de la mesa a "libre"
+        $table->status = 0; // 1 = libre
+        $table->save();
 
         // Si no hay pedido abierto, devolver error
         if (!$order) {
