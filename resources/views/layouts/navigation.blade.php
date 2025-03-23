@@ -134,7 +134,7 @@
                      - Empleado
                     @break
                 @default
-
+                    Ninguno
             @endswitch
         </div>
     @endif

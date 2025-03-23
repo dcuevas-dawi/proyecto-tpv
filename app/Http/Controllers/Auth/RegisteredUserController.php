@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Artisan;
 
 class RegisteredUserController extends Controller
 {
@@ -43,8 +44,13 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
+        // This executes a seeder to create 10 tables
+        Artisan::call('db:seed', [
+            '--class' => 'TableSeeder',
+        ]);
+
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('menu', absolute: false));
     }
 }

@@ -7,12 +7,12 @@ use App\Models\Employee;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class EmployeeLoginController extends Controller  // Una vez tenemos creado el dueño, utilizamos este ontrolador para crear otros usuarios
+class EmployeeLoginController extends Controller  // Once we have created the owner, we use this controller to create other users
 {
 
     public function showLoginForm()
     {
-        $employees = Employee::all();
+        $employees = Employee::where('user_id', auth()->user()->id)->get();
         return view('employee.login', compact('employees'));
     }
 

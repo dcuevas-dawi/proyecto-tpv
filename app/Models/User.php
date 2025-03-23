@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable  // User representa cada establecimiento
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -49,5 +49,16 @@ class User extends Authenticatable
     public function employees()
     {
         return $this->hasMany(Employee::class);
+    }
+
+    public function tables()
+    {
+        return $this->hasMany(Table::class);
+    }
+
+    // Relación con productos
+    public function products()
+    {
+        return $this->hasMany(Product::class);
     }
 }
