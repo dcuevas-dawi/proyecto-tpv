@@ -15,7 +15,7 @@ class TableSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::latest()->first();
+        $user = User::latest()->first(); // Last created user id
 
         // Creates 10 tables for new user (stablishment)
         if ($user) {

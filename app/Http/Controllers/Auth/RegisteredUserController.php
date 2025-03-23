@@ -49,6 +49,11 @@ class RegisteredUserController extends Controller
             '--class' => 'TableSeeder',
         ]);
 
+        // This executes a seeder to create 20 example products
+        Artisan::call('db:seed', [
+            '--class' => 'ProductSeeder',
+        ]);
+
         Auth::login($user);
 
         return redirect(route('menu', absolute: false));
