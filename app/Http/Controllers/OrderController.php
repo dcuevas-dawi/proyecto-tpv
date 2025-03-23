@@ -27,7 +27,7 @@ class OrderController extends Controller
             ]);
         }
 
-        return redirect()->route('orders.edit', $order->id);
+        return redirect()->route('tables.show', ['number' => $table->number])->with('success', 'Nuevo pedido creado');
     }
 
     public function edit($orderId)
