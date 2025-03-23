@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeLoginController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\FirstEmployeeSetupController;
+use App\Http\Controllers\TableController;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -46,6 +47,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/employee/login', [EmployeeLoginController::class, 'login'])->name('employee.authenticate');
     Route::get('/employee/login', [EmployeeLoginController::class, 'showLoginForm'])->name('employee.login');
+
+    Route::get('tables/select/{id}', [TableController::class, 'select'])->name('tables.select');
+    Route::resource('tables', TableController::class); // Resource manage all the CRUD routes for the TableController
 });
 
 
