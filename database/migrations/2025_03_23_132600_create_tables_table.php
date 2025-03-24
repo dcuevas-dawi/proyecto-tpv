@@ -18,6 +18,7 @@ class CreateTablesTable extends Migration
             $table->unsignedInteger('user_id'); // Id de user (que representa el establecimiento)
             $table->integer('number');
             $table->boolean('status')->default(false); // False=Free or busy=true
+            $table->boolean('active')->default(true); // False=Inactive or True=Active
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

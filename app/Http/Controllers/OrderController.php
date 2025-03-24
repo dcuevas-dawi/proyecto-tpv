@@ -24,8 +24,9 @@ class OrderController extends Controller
         $order = $table->orders()->where('status', 'abierto')->first();
 
         if (!$order) {
-            $order = Order::create([
+            Order::create([
                 'table_id' => $table->id,
+                'user_id' => auth()->id(),
                 'status' => 'abierto',
                 'total_price' => 0,
             ]);
@@ -75,12 +76,15 @@ class OrderController extends Controller
             $order->products()->updateExistingPivot($product->id, [
                 'quantity' => $existingProduct->pivot->quantity + $request->quantity,
                 'price_at_time' => $product->price,
+                'updated_at' => now(),
             ]);
         } else {
             // Si no, agregarlo como un nuevo producto
             $order->products()->attach($product->id, [
                 'quantity' => $request->quantity,
                 'price_at_time' => $product->price,
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         }
 
