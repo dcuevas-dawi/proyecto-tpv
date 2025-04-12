@@ -15,7 +15,7 @@ class CreateTablesTable extends Migration
     {
         Schema::create('tables', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('user_id'); // Id de user (que representa el establecimiento)
+            $table->unsignedInteger('user_id'); // Id de user (stablishment)
             $table->integer('number');
             $table->boolean('status')->default(false); // False=Free or busy=true
             $table->boolean('active')->default(true); // False=Inactive or True=Active

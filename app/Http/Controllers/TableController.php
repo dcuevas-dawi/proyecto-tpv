@@ -9,6 +9,7 @@ use App\Models\Order;
 
 class TableController extends Controller
 {
+    //Lis all tables
     public function index()
     {
         $tables = Table::where('user_id', auth()->id())
@@ -17,69 +18,73 @@ class TableController extends Controller
         return view('tables.index', compact('tables'));
     }
 
+    // Show a specific table
     public function show($number)
     {
-        // Buscar la mesa
         $table = Table::where('number', $number)
             ->where('user_id', auth()->user()->id) // Asegura que la mesa pertenece al establecimiento del usuario
             ->firstOrFail();
 
-        // Si no se encuentra la mesa o la mesa no pertenece al establecimiento, aborta con error 403
         if (!$table) {
             abort(403, 'No tienes permiso para acceder a esta mesa');
         }
 
-        // Buscar el pedido abierto de la mesa (si existe)
+        // Look for acrtive order
         $order = $table->orders()->open()->first();
 
-        // Si no hay un pedido abierto, podemos crear uno nuevo
-
-
-        // Obtener todos los productos disponibles para agregar al pedido
+        // List all products for the user
         $products = Product::where('user_id', auth()->user()->id)->get();
 
-        // Retornar la vista con la mesa, el pedido y los productos
         return view('tables.show', compact('table', 'order', 'products', 'table'));
     }
 
-    public function store(Request $request)
+    // Show all tables for owner
+    public function manage()
     {
-        $request->validate([
-            'number' => 'required|integer',
-        ]);
-
-        // Buscar si ya existía una mesa con ese número, aunque esté inactiva
-        $existingTable = Table::where('number', $request->number)
-            ->where('user_id', auth()->id())
-            ->first();
-
-        if ($existingTable) {
-            // Si existe, actualizamos el estado a activa
-            $existingTable->active = 1;
-            $existingTable->save();
-        } else {
-            // Si no existía, la creamos
-            Table::create([
-                'user_id' => auth()->id(),
-                'number' => $request->number,
-                'active' => 1,
-                'status' => 0,
-            ]);
+        if (session('employee_role') != 1) {
+            abort(403, 'Acceso no autorizado');
         }
 
-        return redirect()->route('tables.index')->with('success', 'Mesa guardada correctamente.');
+        $tables = Table::where('user_id', auth()->id())
+            ->get();
+        return view('tables.manage', compact('tables'));
     }
 
-    public function destroy($id)
+    // Add a new table (being owner)
+    public function add(Request $request)
     {
-        $table = Table::where('id', $id)
-            ->where('user_id', auth()->id())
-            ->firstOrFail();
+        $userId = auth()->id();
 
+        // Buscar el número más alto de mesa que haya tenido este usuario
+        $maxNumber = Table::where('user_id', $userId)->max('number') ?? 0;
+
+        // Crear la nueva mesa con el siguiente número
+        Table::create([
+            'user_id' => $userId,
+            'number' => $maxNumber + 1
+        ]);
+
+        return redirect()->route('tables.manage')->with('success', 'Nueva mesa añadida correctamente.');
+    }
+
+    // Deactivate a table (being owner)
+    public function deactivate($id)
+    {
+        $table = Table::findOrFail($id);
         $table->active = 0;
         $table->save();
 
-        return redirect()->route('tables.index')->with('success', 'Mesa desactivada correctamente.');
+        return redirect()->route('tables.manage')->with('success', 'Mesa desactivada correctamente.');
+    }
+
+    // Activate a table (being owner)
+    public function activate($id)
+    {
+        $table = Table::findOrFail($id);
+        $table->active = 1;
+        $table->save();
+
+        return redirect()->route('tables.manage')->with('success', 'Mesa activada correctamente.');
     }
 
 }

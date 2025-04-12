@@ -37,26 +37,35 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/employee/create', [EmployeeLoginController::class, 'create'])->name('employee.create');
     Route::post('/employee/store', [EmployeeLoginController::class, 'store'])->name('employee.store');
 
+    // Employees login
+    Route::get('/employee/login', function () {
+        return view('employee.login');
+    })->name('employee.login');
+
     Route::post('/employee/logout', function () {
         session()->forget(['employee_name', 'employee_role']);
         return redirect()->route('employee.login');
     })->name('employee.logout');
 
-    Route::get('/employee/login', function () {
-        return view('employee.login');
-    })->name('employee.login');
-
     Route::post('/employee/login', [EmployeeLoginController::class, 'login'])->name('employee.authenticate');
     Route::get('/employee/login', [EmployeeLoginController::class, 'showLoginForm'])->name('employee.login');
 
-    Route::resource('tables', TableController::class); // Resource manage all the CRUD routes for the TableController
+    // Tables manage routes
+    Route::get('/tables/manage', [TableController::class, 'manage'])->name('tables.manage');
+    Route::post('/tables/add', [TableController::class, 'add'])->name('tables.add');
+    Route::patch('/tables/deactivate/{id}', [TableController::class, 'deactivate'])->name('tables.deactivate');
+    Route::patch('/tables/activate/{id}', [TableController::class, 'activate'])->name('tables.activate');
 
+    // Tables regular usage
+    Route::resource('tables', TableController::class); // Resource manage all the CRUD routes for the TableController
     Route::get('/tables/{number}', [TableController::class, 'show'])->name('tables.show');
     Route::post('/tables/{tableId}/close-order', [OrderController::class, 'closeOrder'])->name('tables.closeOrder');
 
+    // Orders routes
     Route::post('/orders/create/{table}', [OrderController::class, 'create'])->name('orders.create');
     Route::get('/orders/{orderId}/edit', [OrderController::class, 'edit'])->name('orders.edit');
     Route::post('/orders/{orderId}/add-product', [OrderController::class, 'addProduct'])->name('orders.addProduct');
+
 
 
 });
