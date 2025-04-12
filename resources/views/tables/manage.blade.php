@@ -2,6 +2,18 @@
     <div class="container mx-auto p-6">
         <h2 class="text-3xl font-bold mb-6">Gestión de Mesas</h2>
 
+        @if(session('success'))
+            <div class="mb-4 p-4 bg-green-100 text-green-800 rounded">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="mb-4 p-4 bg-red-100 text-red-800 rounded">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             @foreach ($tables as $table)
                 <div class="p-4 bg-white rounded shadow flex flex-col justify-between">

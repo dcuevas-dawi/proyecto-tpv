@@ -71,11 +71,18 @@ class TableController extends Controller
     public function deactivate($id)
     {
         $table = Table::findOrFail($id);
+
+        // Verificar si la mesa está ocupada (status = 1)
+        if ($table->status == 1) {
+            return redirect()->route('tables.manage')->with('error', 'No se puede desactivar una mesa con un pedido abierto.');
+        }
+
         $table->active = 0;
         $table->save();
 
         return redirect()->route('tables.manage')->with('success', 'Mesa desactivada correctamente.');
     }
+
 
     // Activate a table (being owner)
     public function activate($id)
