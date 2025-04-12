@@ -14,7 +14,7 @@
             </div>
         @endif
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
             @foreach ($tables as $table)
                 <div class="p-4 bg-white rounded shadow flex flex-col justify-between">
                     <div>
@@ -26,7 +26,7 @@
                         </p>
                     </div>
 
-                    <div class="mt-4">
+                    <div class="mt-4 self-end">
                         @if ($table->active)
                             <form method="POST" action="{{ route('tables.deactivate', $table->id) }}">
                                 @csrf
