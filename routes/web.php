@@ -65,8 +65,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/orders/create/{table}', [OrderController::class, 'create'])->name('orders.create');
     Route::get('/orders/{orderId}/edit', [OrderController::class, 'edit'])->name('orders.edit');
     Route::post('/orders/{orderId}/add-product', [OrderController::class, 'addProduct'])->name('orders.addProduct');
-
-
+    Route::patch('/orders/{orderId}/products/{productId}', [OrderController::class, 'updateQuantity'])->name('orders.updateQuantity');
+    Route::delete('/orders/{orderId}/products/{productId}', [OrderController::class, 'removeProduct'])->name('orders.removeProduct');
 
 });
 

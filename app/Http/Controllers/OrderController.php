@@ -120,4 +120,50 @@ class OrderController extends Controller
 
         return redirect()->route('tables.show', $table->number)->with('success', 'Pedido cerrado y pagado');
     }
+
+    // Update product quantity in order
+    public function updateQuantity(Request $request, $orderId, $productId)
+    {
+        $request->validate([
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        $order = Order::findOrFail($orderId);
+
+        if (!$order->products()->where('product_id', $productId)->exists()) {
+            return redirect()->back()->with('error', 'El producto no está en el pedido');
+        }
+
+        $order->products()->updateExistingPivot($productId, [
+            'quantity' => $request->quantity,
+            'updated_at' => now(),
+        ]);
+
+        $order->total_price = $order->products->sum(function ($product) {
+            return $product->pivot->quantity * $product->pivot->price_at_time;
+        });
+        $order->save();
+
+        return redirect()->back()->with('success', 'Cantidad actualizada');
+    }
+
+    // Remove product from order
+    public function removeProduct($orderId, $productId)
+    {
+        $order = Order::findOrFail($orderId);
+
+
+        if (!$order->products()->where('product_id', $productId)->exists()) {
+            return redirect()->back()->with('error', 'El producto no está en el pedido');
+        }
+
+        $order->products()->detach($productId);
+
+        $order->total_price = $order->products->sum(function ($product) {
+            return $product->pivot->quantity * $product->pivot->price_at_time;
+        });
+        $order->save();
+
+        return redirect()->back()->with('success', 'Producto eliminado del pedido');
+    }
 }
