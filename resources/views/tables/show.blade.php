@@ -115,9 +115,11 @@
                     </ul>
                 </div>
 
-                <form action="{{ route('tables.closeOrder', $table->id) }}" method="POST" class="mt-4">
+                <form action="{{ route('tables.closeOrder', $table->id) }}" method="POST" class="mt-4" id="closeOrderForm">
                     @csrf
-                    <button type="submit" class="w-full py-3 bg-green-500 text-white font-semibold rounded-md shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">Cerrar y Marcar como Pagado</button>
+                    <button type="submit" class="w-full py-3 bg-green-500 text-white font-semibold rounded-md shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                        Cerrar y Marcar como Pagado
+                    </button>
                 </form>
             @else
                 <p class="text-lg text-gray-600 mb-6">No hay un pedido abierto para esta mesa.</p>

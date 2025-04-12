@@ -103,14 +103,17 @@ class OrderController extends Controller
         $table = Table::findOrFail($tableId);
         $order = $table->orders()->open()->first();
 
-        // Cambiar el estado de la mesa a "libre"
-        $table->status = 0; // 1 = libre
-        $table->save();
-
         // Si no hay pedido abierto, devolver error
         if (!$order) {
-            return redirect()->route('tables.show', $table->number)->with('error', 'No hay un pedido abierto para esta mesa');
+            return response()->json([
+                'success' => false,
+                'message' => 'No hay un pedido abierto para esta mesa'
+            ]);
         }
+
+        // Cambiar el estado de la mesa a "libre"
+        $table->status = 0; // 0 = libre
+        $table->save();
 
         $order->closed_at = now();
 
@@ -118,7 +121,12 @@ class OrderController extends Controller
         $order->status = 'cerrado';
         $order->save();
 
-        return redirect()->route('tables.show', $table->number)->with('success', 'Pedido cerrado y pagado');
+        // Devolver respuesta JSON con la URL del ticket
+        return response()->json([
+            'success' => true,
+            'message' => 'Pedido cerrado correctamente',
+            'ticket_url' => route('orders.print', $order->id)
+        ]);
     }
 
     // Update product quantity in order
@@ -165,5 +173,17 @@ class OrderController extends Controller
         $order->save();
 
         return redirect()->back()->with('success', 'Producto eliminado del pedido');
+    }
+
+    public function printTicket($orderId)
+    {
+        $order = Order::with(['products', 'table'])->findOrFail($orderId);
+
+        // Verificar que la orden esté cerrada
+        if ($order->status !== 'cerrado') {
+            return redirect()->back()->with('error', 'Solo se pueden imprimir tickets de pedidos cerrados');
+        }
+
+        return view('orders.ticket', compact('order'));
     }
 }

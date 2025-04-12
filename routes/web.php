@@ -68,6 +68,7 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/orders/{orderId}/products/{productId}', [OrderController::class, 'updateQuantity'])->name('orders.updateQuantity');
     Route::delete('/orders/{orderId}/products/{productId}', [OrderController::class, 'removeProduct'])->name('orders.removeProduct');
 
+    Route::get('/orders/{orderId}/print', [OrderController::class, 'printTicket'])->name('orders.print');
 });
 
 
