@@ -53,7 +53,7 @@
             margin-bottom: 10px;
         }
 
-        .iva-desglose {
+        .iva {
             margin-top: 10px;
             width: 100%;
             font-size: 12px;
@@ -70,16 +70,46 @@
 </head>
 <body>
 <div class="header">
-    <h1>{{ config('app.name', 'Restaurante') }}</h1>
+    <h1>
+        @if (Auth::user()->stablishmentDetails && Auth::user()->stablishmentDetails->commercial_name)
+            {{ Auth::user()->stablishmentDetails->commercial_name }}
+        @elseif (Auth::user()->stablishmentDetails)
+            {{ Auth::user()->stablishmentDetails->legal_name }}
+        @else
+            Ticket de compra
+        @endif
+    </h1>
 </div>
 
 <div class="company-info">
-    <p><strong>RESTAURANTE EJEMPLO, S.L.</strong></p>
-    <p>CIF: B12345678</p>
-    <p>C/ Gran Vía, 123</p>
-    <p>28001 Madrid</p>
-    <p>Tel: 912 345 678</p>
-    <p>info@restauranteejemplo.com</p>
+    @if(Auth::user()->stablishmentDetails && Auth::user()->stablishmentDetails->legal_name)
+        <p>{{ Auth::user()->stablishmentDetails->legal_name }}</p>
+    @endif
+    @if(Auth::user()->stablishmentDetails && Auth::user()->stablishmentDetails->cif)
+        <p>CIF: {{ Auth::user()->stablishmentDetails->cif }}</p>
+    @endif
+    @if(Auth::user()->stablishmentDetails && Auth::user()->stablishmentDetails->address)
+        <p>{{ Auth::user()->stablishmentDetails->address }}</p>
+    @endif
+    @if(Auth::user()->stablishmentDetails && (Auth::user()->stablishmentDetails->postal_code || Auth::user()->stablishmentDetails->city || Auth::user()->stablishmentDetails->province))
+        <p>
+        @if(Auth::user()->stablishmentDetails->postal_code)
+            {{ Auth::user()->stablishmentDetails->postal_code }}
+        @endif
+        @if(Auth::user()->stablishmentDetails->city)
+            {{ Auth::user()->stablishmentDetails->city }}
+        @endif
+        @if(Auth::user()->stablishmentDetails->province)
+            {{ Auth::user()->stablishmentDetails->province }}
+        @endif
+        </p>
+    @endif
+    @if(Auth::user()->stablishmentDetails && Auth::user()->stablishmentDetails->phone)
+        <p>Tel: {{ Auth::user()->stablishmentDetails->phone }}</p>
+    @endif
+    @if(Auth::user()->stablishmentDetails && Auth::user()->stablishmentDetails->email)
+        <p>{{ Auth::user()->stablishmentDetails->email }}</p>
+    @endif
 </div>
 
 <div class="ticket-info">
@@ -87,7 +117,7 @@
     <p>Mesa: {{ $order->table->number }}</p>
     <p>Fecha: {{ $order->updated_at->format('d/m/Y H:i') }}</p>
     <p>Pedido: #{{ $order->id }}</p>
-    <p>Le atendió: {{ $order->employee->name ?? 'Carlos García' }}</p>
+    <p>Le atendió: {{ (session('employee_name')) }}</p>
 </div>
 
 <table class="product-list">
@@ -115,7 +145,7 @@
     $baseImponible = $subtotal - $iva;
 @endphp
 
-<table class="iva-desglose">
+<table class="iva">
     <tr>
         <td align="left">Base imponible</td>
         <td align="right">{{ number_format($baseImponible, 2) }}€</td>

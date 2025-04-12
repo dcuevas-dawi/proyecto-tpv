@@ -119,6 +119,7 @@ class OrderController extends Controller
 
         // Actualizar el estado del pedido a cerrado (pagado)
         $order->status = 'cerrado';
+        $order->employee_id = session('employee_id');
         $order->save();
 
         // Devolver respuesta JSON con la URL del ticket
@@ -177,13 +178,13 @@ class OrderController extends Controller
 
     public function printTicket($orderId)
     {
-        $order = Order::with(['products', 'table'])->findOrFail($orderId);
+        $order = Order::findOrFail($orderId);
+        $stablishmentDetails = auth()->user()->stablishmentDetails;
 
-        // Verificar que la orden esté cerrada
         if ($order->status !== 'cerrado') {
             return redirect()->back()->with('error', 'Solo se pueden imprimir tickets de pedidos cerrados');
         }
 
-        return view('orders.ticket', compact('order'));
+        return view('orders.ticket', compact('order', 'stablishmentDetails'));
     }
 }

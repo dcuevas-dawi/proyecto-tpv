@@ -42,4 +42,9 @@ class Order extends Model
     {
         return $query->where('status', 'abierto');
     }
+
+    public function employee()
+    {
+        return $this->belongsTo(User::class, 'employee_id');
+    }
 }

@@ -31,6 +31,7 @@ class EmployeeLoginController extends Controller  // Once we have created the ow
 
         if ($employee && Hash::check($request->employee_pin, $employee->pin)) {
             session([
+                'employee_id' => $employee->id,
                 'employee_name' => $employee->name,
                 'employee_role' => $employee->role,
             ]);

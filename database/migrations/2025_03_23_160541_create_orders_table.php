@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('status');
             $table->decimal('total_price', 8, 2)->default(0);
             $table->timestamp('closed_at')->nullable();
+            $table->foreignId('employee_id')->nullable()->after('table_id')
+                ->constrained('employees')->nullOnDelete();
             $table->timestamps();
         });
     }

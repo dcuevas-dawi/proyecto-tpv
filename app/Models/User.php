@@ -61,4 +61,8 @@ class User extends Authenticatable  // User representa cada establecimiento
     {
         return $this->hasMany(Product::class);
     }
+    public function stablishmentDetails()
+    {
+        return $this->hasOne(StablishmentDetails::class);
+    }
 }
