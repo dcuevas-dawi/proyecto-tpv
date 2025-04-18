@@ -1,7 +1,7 @@
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
+        <div class="flex justify-between items-center h-16">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
@@ -9,14 +9,35 @@
                         <img class="block h-14 w-auto" src="{{ asset('favicon.png') }}" alt="Logo">
                     </a>
                 </div>
-
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('menu')" :active="request()->routeIs('menu')">
-                        {{ __('Menú') }}
-                    </x-nav-link>
-                </div>
             </div>
+
+            @if(session('employee_name'))
+                <div class="text-center text-sm text-gray-600 dark:text-gray-400 mt-4">
+                    Empleado actual: {{ session('employee_name') }}
+                    @switch(session('employee_role'))
+                        @case(1)
+                            - Dueño
+                            @break
+                        @case(2)
+                            - Encargado
+                            @break
+                        @case(3)
+                            - Empleado
+                            @break
+                        @default
+                            Ninguno
+                    @endswitch
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('employee.logout') }}">
+                @csrf
+                <x-dropdown-link :href="route('logout')" class="w-fit text-7xl text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                                 onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                    {{ __('Cambiar empleado') }}
+                </x-dropdown-link>
+            </form>
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -48,26 +69,6 @@
                                 {{ __('Salir') }}
                             </x-dropdown-link>
                         </form>
-
-                        <form method="POST" action="{{ route('employee.logout') }}">
-                            @csrf
-                            <x-dropdown-link :href="route('logout')"
-                                             onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Cambiar empleado') }}
-                            </x-dropdown-link>
-                        </form>
-                        {{-- Botón solo visible para el dueño para crear empleados --}}
-                        @if(session('employee_role') == 1)
-                            <form method="Get" action="{{ route('employee.create') }}">
-                                @csrf
-                                <x-dropdown-link :href="route('logout')"
-                                                 onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                    {{ __('Crear empleado') }}
-                                </x-dropdown-link>
-                            </form>
-                        @endif
 
                     </x-slot>
                 </x-dropdown>
@@ -120,23 +121,5 @@
 
 
     </div>
-    @if(session('employee_name')||true)
-        <div class="text-center text-sm text-gray-600 dark:text-gray-400">
-            Empleado actual: {{ session('employee_name') }}
-            @switch(session('employee_role'))
-                @case(1)
-                     - Dueño
-                    @break
-                @case(2)
-                     - Encargado
-                    @break
-                @case(3)
-                     - Empleado
-                    @break
-                @default
-                    Ninguno
-            @endswitch
-        </div>
-    @endif
 
 </nav>
