@@ -70,7 +70,7 @@
                                             @endif
                                         </td>
                                         <td class="py-3 px-6 text-center">
-                                            <div class="flex flex-col-2 gap-2 items-center">
+                                            <div class="flex flex-row gap-2 items-center">
                                                 <a href="{{ route('orders.view', $order->id) }}"
                                                    class="block w-full py-2 px-4 bg-green-500 hover:bg-green-600 text-white rounded-lg text-center shadow">
                                                     <i class="fas fa-eye mr-1"></i> Ver

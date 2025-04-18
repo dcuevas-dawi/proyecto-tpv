@@ -7,6 +7,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\FirstEmployeeSetupController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\AccountingController;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -76,6 +77,11 @@ Route::middleware(['auth'])->group(function () {
     // Stablishment details routes
     Route::get('/stablishment_details/edit', [App\Http\Controllers\StablishmentDetailsController::class, 'edit'])->name('stablishment_details.edit');
     Route::post('/stablishment_details/update', [App\Http\Controllers\StablishmentDetailsController::class, 'update'])->name('stablishment_details.update');
+
+    // Accounting routes
+    Route::get('/accounting', [AccountingController::class, 'index'])->name('accounting.index');
+    Route::get('/accounting/report', [AccountingController::class, 'report'])->name('accounting.report');
+
 });
 
 
