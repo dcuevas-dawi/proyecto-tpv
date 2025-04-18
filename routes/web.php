@@ -68,6 +68,9 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/orders/{orderId}/products/{productId}', [OrderController::class, 'updateQuantity'])->name('orders.updateQuantity');
     Route::delete('/orders/{orderId}/products/{productId}', [OrderController::class, 'removeProduct'])->name('orders.removeProduct');
     Route::get('/orders/{orderId}/print', [OrderController::class, 'printTicket'])->name('orders.print');
+    // History
+    Route::get('/orders/history', [OrderController::class, 'history'])->name('orders.history');
+    Route::get('/orders/by-date', [OrderController::class, 'getOrdersByDate'])->name('orders.byDate');
 
     // Stablishment details routes
     Route::get('/stablishment_details/edit', [App\Http\Controllers\StablishmentDetailsController::class, 'edit'])->name('stablishment_details.edit');

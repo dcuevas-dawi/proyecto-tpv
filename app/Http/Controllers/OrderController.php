@@ -176,6 +176,7 @@ class OrderController extends Controller
         return redirect()->back()->with('success', 'Producto eliminado del pedido');
     }
 
+    // Print ticket for closed order
     public function printTicket($orderId)
     {
         $order = Order::findOrFail($orderId);
@@ -186,5 +187,33 @@ class OrderController extends Controller
         }
 
         return view('orders.ticket', compact('order', 'stablishmentDetails'));
+    }
+
+    // Show order history for now
+    public function history()
+    {
+        $today = now()->format('Y-m-d');
+
+        $orders = Order::where('status', 'cerrado')
+            ->whereDate('closed_at', $today)
+            ->latest('closed_at')
+            ->get();
+
+        return view('orders.history', compact('orders'));
+    }
+
+    // Get orders by date range
+    public function getOrdersByDate(Request $request)
+    {
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date') ?? $start_date;
+
+        $orders = Order::where('status', 'cerrado')
+            ->whereDate('closed_at', '>=', $start_date)
+            ->whereDate('closed_at', '<=', $end_date)
+            ->latest('closed_at')
+            ->get();
+
+        return view('orders.history', compact('orders', 'start_date', 'end_date'));
     }
 }
