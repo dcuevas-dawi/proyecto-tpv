@@ -15,7 +15,7 @@ class ProductController extends Controller
 
         switch ($filter) {
             case 'all':
-                // No filter
+                $query->where('active', true);
                 break;
             case 'inactive':
                 $query->where('active', false);
