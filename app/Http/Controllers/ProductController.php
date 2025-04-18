@@ -48,10 +48,19 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'category' => 'required|in:food,drink,other',
+            'name' => 'required|string|max:100',
+            'description' => 'nullable|string|max:500',
+            'price' => 'required|numeric|min:0.01|max:9999.99',
+            'category' => 'required|in:food,drink,other'
+        ], [
+            'name.required' => 'El nombre del producto es obligatorio',
+            'name.max' => 'El nombre no puede tener más de 100 caracteres',
+            'price.required' => 'El precio es obligatorio',
+            'price.numeric' => 'El precio debe ser un número separando los decimales por un punto',
+            'price.min' => 'El precio mínimo es 0,01 €',
+            'price.max' => 'El precio máximo es 9.999,99 €',
+            'category.required' => 'Debes seleccionar una categoría',
+            'category.in' => 'La categoría seleccionada no es válida'
         ]);
 
         Product::create([
@@ -83,10 +92,19 @@ class ProductController extends Controller
         }
 
         $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'category' => 'required|in:food,drink,other',
+            'name' => 'required|string|max:100',
+            'description' => 'nullable|string|max:500',
+            'price' => 'required|numeric|min:0.01|max:9999.99',
+            'category' => 'required|in:food,drink,other'
+        ], [
+            'name.required' => 'El nombre del producto es obligatorio',
+            'name.max' => 'El nombre no puede tener más de 100 caracteres',
+            'price.required' => 'El precio es obligatorio',
+            'price.numeric' => 'El precio debe ser un número separando los decimales por un punto',
+            'price.min' => 'El precio mínimo es 0,01 €',
+            'price.max' => 'El precio máximo es 9.999,99 €',
+            'category.required' => 'Debes seleccionar una categoría',
+            'category.in' => 'La categoría seleccionada no es válida'
         ]);
 
         $product->update([
