@@ -15,8 +15,8 @@ class HistoricalOrdersSeeder extends Seeder
     public function run(): void
     {
         // Customizable configuration
-        $userId = 22; // If null, the first user will be used
-        $daysBack = 365; // Number of days back to generate orders
+        $userId = 23; // If null, the first user will be used
+        $daysBack = 30; // Number of days back to generate orders
         $minOrdersPerDay = 2; // Minimum orders per day
         $maxOrdersPerDay = 8; // Maximum orders per day
         $minProductsPerOrder = 1; // Minimum products per order
@@ -61,7 +61,7 @@ class HistoricalOrdersSeeder extends Seeder
 
         $tables = collect($validTables);
 
-        $products = Product::where('user_id', $user->id)->get();
+        $products = Product::where('user_id', $user->id)->active()->get();
         if ($products->isEmpty()) {
             $this->command->error('User has no products');
             return;
@@ -177,7 +177,7 @@ class HistoricalOrdersSeeder extends Seeder
                 $productsToAdd = $products->count();
             }
 
-            $selectedProducts = $products->random(max(1, $productsToAdd));
+            $selectedProducts = $products->where('active', true)->random(max(1, $productsToAdd));
             $totalPrice = 0;
 
             foreach ($selectedProducts as $product) {

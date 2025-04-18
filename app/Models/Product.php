@@ -9,6 +9,20 @@ class Product extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'user_id',
+        'name',
+        'description',
+        'price',
+        'category',
+        'active'
+    ];
+
+    public function scopeActive($query)
+    {
+        return $query->where('active', true);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

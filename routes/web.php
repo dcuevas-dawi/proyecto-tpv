@@ -8,6 +8,8 @@ use App\Http\Controllers\FirstEmployeeSetupController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AccountingController;
+use App\Http\Controllers\StablishmentDetailsController;
+use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -75,13 +77,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/orders/{orderId}/view', [OrderController::class, 'viewTicket'])->name('orders.view');
 
     // Stablishment details routes
-    Route::get('/stablishment_details/edit', [App\Http\Controllers\StablishmentDetailsController::class, 'edit'])->name('stablishment_details.edit');
-    Route::post('/stablishment_details/update', [App\Http\Controllers\StablishmentDetailsController::class, 'update'])->name('stablishment_details.update');
+    Route::get('/stablishment_details/edit', [StablishmentDetailsController::class, 'edit'])->name('stablishment_details.edit');
+    Route::post('/stablishment_details/update', [StablishmentDetailsController::class, 'update'])->name('stablishment_details.update');
 
     // Accounting routes
     Route::get('/accounting', [AccountingController::class, 'index'])->name('accounting.index');
     Route::get('/accounting/report', [AccountingController::class, 'report'])->name('accounting.report');
 
+    // Products routes CRUD
+    Route::resource('products', ProductController::class); // Resource manage all the CRUD routes
+    Route::post('products/{product}/restore', [ProductController::class, 'restore'])->name('products.restore');
 });
 
 

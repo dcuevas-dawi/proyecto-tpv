@@ -33,7 +33,7 @@ class TableController extends Controller
         $order = $table->orders()->open()->first();
 
         // List all products for the user
-        $products = Product::where('user_id', auth()->user()->id)->get();
+        $products = Product::where('user_id', auth()->user()->id)->active()->get();
 
         return view('tables.show', compact('table', 'order', 'products', 'table'));
     }

@@ -38,7 +38,7 @@ class OrderController extends Controller
     public function edit($orderId)
     {
         $order = Order::findOrFail($orderId);
-        $products = Product::where('user_id', auth()->user()->id)->get();
+        $products = Product::where('user_id', Auth::id())->active()->get();
         $table = $order->table;
 
         return view('tables.show', compact('order', 'products', 'table'));
