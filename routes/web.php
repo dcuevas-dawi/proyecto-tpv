@@ -71,6 +71,7 @@ Route::middleware(['auth'])->group(function () {
     // History
     Route::get('/orders/history', [OrderController::class, 'history'])->name('orders.history');
     Route::get('/orders/by-date', [OrderController::class, 'getOrdersByDate'])->name('orders.byDate');
+    Route::get('/orders/{orderId}/view', [OrderController::class, 'viewTicket'])->name('orders.view');
 
     // Stablishment details routes
     Route::get('/stablishment_details/edit', [App\Http\Controllers\StablishmentDetailsController::class, 'edit'])->name('stablishment_details.edit');

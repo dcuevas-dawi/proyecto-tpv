@@ -216,4 +216,11 @@ class OrderController extends Controller
 
         return view('orders.history', compact('orders', 'start_date', 'end_date'));
     }
+
+    // View ticket for a order
+    public function viewTicket($orderId)
+    {
+        $order = Order::with(['products', 'table', 'employee'])->findOrFail($orderId);
+        return view('orders.view-ticket', compact('order'));
+    }
 }

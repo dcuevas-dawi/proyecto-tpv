@@ -49,7 +49,7 @@
                                     <th class="py-3 px-6 text-left">Cierre</th>
                                     <th class="py-3 px-6 text-left">Total</th>
                                     <th class="py-3 px-6 text-left">Empleado</th>
-                                    <th class="py-3 px-6 text-center">Acciones</th>
+                                    <th class="py-3 px-6 text-center w-36">Acciones</th>
                                 </tr>
                                 </thead>
                                 <tbody class="text-gray-600 text-sm">
@@ -70,10 +70,16 @@
                                             @endif
                                         </td>
                                         <td class="py-3 px-6 text-center">
-                                            <a href="{{ route('orders.print', $order->id) }}"
-                                               class="text-blue-600 hover:text-blue-900" target="_blank">
-                                                <i class="fas fa-print mr-1"></i> Imprimir
-                                            </a>
+                                            <div class="flex flex-col-2 gap-2 items-center">
+                                                <a href="{{ route('orders.view', $order->id) }}"
+                                                   class="block w-full py-2 px-4 bg-green-500 hover:bg-green-600 text-white rounded-lg text-center shadow">
+                                                    <i class="fas fa-eye mr-1"></i> Ver
+                                                </a>
+                                                <a href="{{ route('orders.print', $order->id) }}"
+                                                   class="block w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-center shadow" target="_blank">
+                                                    <i class="fas fa-print mr-1"></i> Imprimir
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach
