@@ -1,21 +1,21 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Obtener elementos del formulario
+    // Get form elements
     const periodSelect = document.getElementById('period');
     const startDateInput = document.getElementById('start_date');
     const endDateInput = document.getElementById('end_date');
     const form = document.getElementById('accountingForm');
 
-    // Valores iniciales
+    // Initial values
     let defaultStartDate = startDateInput.value;
     let defaultEndDate = endDateInput.value;
 
-    // Por defecto, seleccionar "Diario" y la fecha actual si no hay valores
+    // By default, select "Daily" and the current date if there are no values
     if (!periodSelect.value) {
         periodSelect.value = 'daily';
         updateDateRanges();
     }
 
-    // Función para actualizar los rangos de fecha según el periodo
+    // Function to update date ranges according to the period
     function updateDateRanges() {
         const now = new Date();
         let startDate = new Date(now);
@@ -23,53 +23,53 @@ document.addEventListener('DOMContentLoaded', function() {
 
         switch(periodSelect.value) {
             case 'daily':
-                // Hoy (sin cambios)
+                // Today (no changes)
                 break;
 
             case 'weekly':
-                // Inicio de la semana (lunes)
-                const day = now.getDay(); // 0 = domingo, 1 = lunes, etc.
-                const diff = day === 0 ? 6 : day - 1; // Ajustar para que la semana empiece en lunes
+                // Start of the week (Monday)
+                const day = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
+                const diff = day === 0 ? 6 : day - 1; // Adjust so that the week starts on Monday
                 startDate.setDate(now.getDate() - diff);
-                // Fin de la semana (domingo)
+                // End of the week (Sunday)
                 endDate = new Date(startDate);
                 endDate.setDate(startDate.getDate() + 6);
                 break;
 
             case 'monthly':
-                // Inicio del mes
+                // Start of the month
                 startDate.setDate(1);
-                // Fin del mes
+                // End of the month
                 endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
                 break;
 
             case 'quarterly':
-                // Determinar el trimestre actual
+                // Determine the current quarter
                 const quarter = Math.floor(now.getMonth() / 3);
-                // Inicio del trimestre
+                // Start of the quarter
                 startDate = new Date(now.getFullYear(), quarter * 3, 1);
-                // Fin del trimestre
+                // End of the quarter
                 endDate = new Date(now.getFullYear(), (quarter + 1) * 3, 0);
                 break;
 
             case 'yearly':
-                // Inicio del año
+                // Start of the year
                 startDate = new Date(now.getFullYear(), 0, 1);
-                // Fin del año
+                // End of the year
                 endDate = new Date(now.getFullYear(), 11, 31);
                 break;
         }
 
-        // Formatear fechas para el input type="date"
+        // Format dates for the input type="date"
         startDateInput.value = formatDateForInput(startDate);
         endDateInput.value = formatDateForInput(endDate);
 
-        // Guardar las fechas predeterminadas actualizadas
+        // Save the updated default dates
         defaultStartDate = startDateInput.value;
         defaultEndDate = endDateInput.value;
     }
 
-    // Formato YYYY-MM-DD para inputs date
+    // Format YYYY-MM-DD for date inputs
     function formatDateForInput(date) {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -77,13 +77,13 @@ document.addEventListener('DOMContentLoaded', function() {
         return `${year}-${month}-${day}`;
     }
 
-    // Actualizar fechas cuando cambia el periodo
+    // Update dates when the period changes
     periodSelect.addEventListener('change', function() {
         updateDateRanges();
-        form.submit(); // Enviar formulario automáticamente
+        form.submit(); // Submit form automatically
     });
 
-    // Inicializar fechas si no tienen valores aún
+    // Initialize dates if they don't have values yet
     if (!startDateInput.value || !endDateInput.value) {
         updateDateRanges();
     }
