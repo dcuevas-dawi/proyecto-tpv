@@ -15,15 +15,12 @@ class HistoricalOrdersSeeder extends Seeder
     public function run(): void
     {
         // Customizable configuration
-        $userId = 23; // If null, the first user will be used
+        $user = User::latest()->first(); // Last created user id
         $daysBack = 30; // Number of days back to generate orders
         $minOrdersPerDay = 2; // Minimum orders per day
         $maxOrdersPerDay = 8; // Maximum orders per day
         $minProductsPerOrder = 1; // Minimum products per order
         $maxProductsPerOrder = 5; // Maximum products per order
-
-        // Verify that the user exists
-        $user = $userId ? User::find($userId) : User::first();
 
         if (!$user) {
             $this->command->error('User not found');
