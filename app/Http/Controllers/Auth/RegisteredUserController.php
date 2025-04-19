@@ -47,11 +47,13 @@ class RegisteredUserController extends Controller
         // This executes a seeder to create 10 tables
         Artisan::call('db:seed', [
             '--class' => 'TableSeeder',
+            '--force' => true,
         ]);
 
         // This executes a seeder to create 20 example products
         Artisan::call('db:seed', [
             '--class' => 'ProductSeeder',
+            '--force' => true,
         ]);
 
         Auth::login($user);
