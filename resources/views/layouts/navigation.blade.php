@@ -1,6 +1,6 @@
 <nav class="bg-white border-b border-gray-200 px-6 py-3">
     <div class="flex justify-between items-center">
-        <!-- Información del empleado actual -->
+
         <div class="flex items-center">
             @if(session('employee_name'))
                 <span class="text-gray-600 font-medium">
@@ -22,17 +22,15 @@
             @endif
         </div>
 
-        <!-- Acciones del usuario -->
         <div class="flex items-center space-x-4">
-            <!-- Botón cambiar empleado -->
+
             <form method="POST" action="{{ route('employee.logout') }}">
                 @csrf
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition duration-200">
+                <button type="submit" class="px-4 py-2 bg-primary text-white rounded hover:bg-primaryLight transition duration-200">
                     Cambiar empleado
                 </button>
             </form>
 
-            <!-- Dropdown usuario establecimiento -->
             <div class="relative" x-data="{ open: false }">
                 <button @click="open = !open" class="flex items-center px-3 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50 focus:outline-none">
                     <span>{{ Auth::user()->name }}</span>
