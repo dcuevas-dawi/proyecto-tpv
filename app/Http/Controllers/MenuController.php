@@ -14,7 +14,7 @@ class MenuController extends Controller
             return redirect()->route('employee.create.owner');
         }
 
-        // Si ya hay empleados, redirige al menú, sinó a crear el primer empleado
+        // Si ya hay empleados, redirige al menú, sinó al login de empleados
         if (session('employee_role')) {
             return view('menu');
         } else {

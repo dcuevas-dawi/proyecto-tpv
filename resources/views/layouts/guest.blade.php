@@ -16,14 +16,15 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
+        <div class="min-h-screen flex flex-col justify-center items-center pt-6 bg-gray-100">
             <div>
                 <a href="/">
                     <img class="block h-40 w-auto" src="{{ asset('favicon.png') }}" alt="Logo">
+                    <h1 class="text-center text-4xl">TPV DC</h1>
                 </a>
             </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
+            <div class="w-full max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden rounded-lg">
                 {{ $slot }}
             </div>
         </div>
