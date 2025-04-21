@@ -20,12 +20,12 @@
     <body class="font-sans antialiased">
         <div class="flex h-screen w-screen bg-gray-100">
             <!-- Aside/Sidebar -->
-            <aside class="w-[12%] h-full bg-white border-r border-gray-200 overflow-y-auto">
+            <aside class="w-[10%] h-full bg-white border-r border-gray-200 overflow-y-auto">
                 @include('layouts.sidebar')
             </aside>
 
             <!-- Main Content Area -->
-            <div class="w-[88%] h-full flex flex-col">
+            <div class="w-[90%] h-full flex flex-col">
                 <!-- Top Navigation -->
                 @include('layouts.navigation')
 

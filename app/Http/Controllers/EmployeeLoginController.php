@@ -59,7 +59,9 @@ class EmployeeLoginController extends Controller  // Once we have created the ow
 
     public function create()
     {
-        return view('employee.create');
+        $employees = Employee::where('user_id', Auth::id())->get();
+
+        return view('employee.create', compact('employees'));
     }
 
     public function store(Request $request)

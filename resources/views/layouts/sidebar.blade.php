@@ -1,4 +1,4 @@
-<div class="p-4 h-full flex flex-col">
+<div class="p-2 h-full flex flex-col">
 
     <div class="mb-4 flex justify-center">
         <a href="{{ route('menu') }}">
@@ -29,7 +29,7 @@
         @endif
 
         @if(session('employee_role') == 1)
-            <a href="{{ route('employee.create') }}" class="block py-2 px-4 rounded {{ request()->routeIs('employees.*') ? 'bg-primary text-white' : 'hover:bg-gray-100' }}">
+            <a href="{{ route('employee.create') }}" class="block py-2 px-4 rounded {{ request()->routeIs('employee.*') ? 'bg-primary text-white' : 'hover:bg-gray-100' }}">
                 Empleados
             </a>
             <a href="{{ route('products.index') }}" class="block py-2 px-4 rounded {{ request()->routeIs('products.*') ? 'bg-primary text-white' : 'hover:bg-gray-100' }}">
