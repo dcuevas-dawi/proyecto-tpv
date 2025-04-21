@@ -16,7 +16,7 @@ class HistoricalOrdersSeeder extends Seeder
     {
         // Customizable configuration
         $user = User::latest()->first(); // Last created user id
-        $daysBack = 30; // Number of days back to generate orders
+        $daysBack = 365; // Number of days back to generate orders
         $minOrdersPerDay = 2; // Minimum orders per day
         $maxOrdersPerDay = 8; // Maximum orders per day
         $minProductsPerOrder = 1; // Minimum products per order
