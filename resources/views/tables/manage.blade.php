@@ -14,9 +14,9 @@
             </div>
         @endif
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="grid grid-cols-4 gap-6">
             @foreach ($tables as $table)
-                <div class="p-4 bg-white rounded shadow flex flex-col justify-between">
+                <div class="table-card group flex flex-col p-6 relative w-full bg-green-300 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300 ease-in-out">
                     <div>
                         <h3 class="text-xl font-semibold">Mesa {{ $table->number }}</h3>
                         <p class="text-gray-600">Estado:
@@ -26,7 +26,7 @@
                         </p>
                     </div>
 
-                    <div class="mt-4 self-end">
+                    <div class="self-end">
                         @if ($table->active)
                             <form method="POST" action="{{ route('tables.deactivate', $table->id) }}">
                                 @csrf
@@ -39,7 +39,7 @@
                             <form method="POST" action="{{ route('tables.activate', $table->id) }}">
                                 @csrf
                                 @method('PATCH')
-                                <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                                <button class="bg-primary hover:bg-primaryLight text-white px-4 py-2 rounded">
                                     Activar
                                 </button>
                             </form>

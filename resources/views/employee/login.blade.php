@@ -6,9 +6,9 @@
     </x-slot>
 
     <div class="py-12 flex justify-center items-center w-full">
-        <div class="flex flex-col md:flex-row gap-6 w-full max-w-4xl px-4">
+        <div class="flex flex-row gap-6 w-full max-w-4xl px-4">
 
-            <div class="w-full md:w-1/2 bg-white overflow-hidden shadow-sm rounded-lg p-6">
+            <div class="w-full w-1/2 bg-white overflow-hidden shadow-sm rounded-lg p-6">
                 <form method="POST" action="{{ route('employee.authenticate') }}">
                     @csrf
 
@@ -40,7 +40,7 @@
                 </form>
             </div>
 
-            <div class="w-full md:w-1/2 bg-white overflow-hidden shadow-sm rounded-lg p-6">
+            <div class="w-full w-1/2 bg-white overflow-hidden shadow-sm rounded-lg p-6">
                 <div class="flex flex-col items-center space-y-4">
                     <div class="grid grid-cols-3 gap-4 w-full">
                         <button type="button" class="numpad-key h-16 text-2xl font-bold bg-gray-100 rounded-md hover:bg-gray-200" data-value="1">1</button>

@@ -2,15 +2,14 @@
     <div class="container mx-auto p-6">
         <h2 class="text-4xl font-bold text-center mb-8">Mesas Disponibles</h2>
 
-        <!-- Grid de mesas con animación al pasar el cursor -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-4 gap-6">
             @foreach ($tables as $table)
                 <a href="{{ route('tables.show', $table->number)}}">
                     <div class="table-card group relative w-full bg-green-300 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300 ease-in-out">
                         <div class="table-card-body p-6 flex flex-col justify-evenly h-full">
                             <h3 class="text-xl font-semibold text-gray-800">Mesa {{ $table->number }}</h3>
                             <p class="text-gray-800">Estado:
-                                <span class="font-medium {{ $table->status == 0 ? 'text-green-800' : 'text-red-500' }}">
+                                <span class="font-medium {{ $table->status == 0 ? 'text-green-700' : 'text-red-500' }}">
                                     {{ $table->status == 0 ? 'Libre' : 'Ocupada' }}
                                 </span>
                             </p>

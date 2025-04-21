@@ -12,6 +12,7 @@
             Menú Principal
         </a>
 
+        @if(session('employee_role'))
         <a href="{{ route('tables.index') }}" class="block py-2 px-4 rounded {{ request()->routeIs('tables.*') ? 'bg-primary text-white' : 'hover:bg-gray-100' }}">
             Mesas
         </a>
@@ -19,6 +20,8 @@
         <a href="{{ route('orders.history') }}" class="block py-2 px-4 rounded {{ request()->routeIs('orders.*') ? 'bg-primary text-white' : 'hover:bg-gray-100' }}">
             Tickets
         </a>
+        @endif
+
         @if(session('employee_role') == 2 || session('employee_role') == 1)
             <a href="{{ route('accounting.index') }}" class="block py-2 px-4 rounded {{ request()->routeIs('accounting.*') ? 'bg-primary text-white' : 'hover:bg-gray-100' }}">
                 Contabilidad
