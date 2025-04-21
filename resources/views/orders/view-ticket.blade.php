@@ -4,10 +4,6 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Detalle del Ticket #') . $order->id }}
             </h2>
-            <a href="{{ route('orders.history') }}"
-               class="px-5 py-3 bg-gray-500 hover:bg-gray-600 text-white text-lg rounded-lg shadow">
-                <i class="fas fa-arrow-left mr-2"></i> Volver
-            </a>
         </div>
     </x-slot>
 
@@ -54,11 +50,11 @@
                 <!-- Botón para volver y para imprimir -->
                 <div class="text-center mt-8 flex flex-col sm:flex-row gap-4 justify-center">
                     <a href="{{ route('orders.history') }}"
-                       class="block py-4 bg-blue-500 hover:bg-blue-600 text-white text-xl rounded-lg shadow text-center w-full sm:w-1/2">
+                       class="block py-4 bg-green-600 hover:bg-green-700 text-white text-xl rounded-lg shadow text-center w-full sm:w-1/2">
                         <i class="fas fa-arrow-left mr-2"></i> Volver al Historial
                     </a>
                     <a href="{{ route('orders.print', $order->id) }}" target="_blank"
-                       class="block py-4 bg-green-500 hover:bg-green-600 text-white text-xl rounded-lg shadow text-center w-full sm:w-1/2">
+                       class="block py-4 bg-green-600 hover:bg-green-700 text-white text-xl rounded-lg shadow text-center w-full sm:w-1/2">
                         <i class="fas fa-print mr-2"></i> Imprimir Ticket
                     </a>
                 </div>
