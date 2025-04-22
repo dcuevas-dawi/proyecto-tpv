@@ -10,6 +10,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AccountingController;
 use App\Http\Controllers\StablishmentDetailsController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CashRegisterController;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -87,6 +88,14 @@ Route::middleware(['auth'])->group(function () {
     // Products routes CRUD
     Route::resource('products', ProductController::class); // Resource manage all the CRUD routes
     Route::post('products/{product}/restore', [ProductController::class, 'restore'])->name('products.restore');
+
+    // Cash register routes
+    Route::get('/cash-register/open', [CashRegisterController::class, 'openForm'])->name('cash-register.open-form');
+    Route::post('/cash-register/open', [CashRegisterController::class, 'open'])->name('cash-register.open');
+    Route::get('/cash-register/close', [CashRegisterController::class, 'closeForm'])->name('cash-register.close-form');
+    Route::post('/cash-register/close', [CashRegisterController::class, 'close'])->name('cash-register.close');
+    Route::get('/cash-register/history', [CashRegisterController::class, 'history'])->name('cash-register.history');
+
 });
 
 

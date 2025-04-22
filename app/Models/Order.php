@@ -15,6 +15,7 @@ class Order extends Model
         'status',
         'total_price',
         'closed_at',
+        'cash_register_id',
     ];
 
     /**
@@ -46,5 +47,10 @@ class Order extends Model
     public function employee()
     {
         return $this->belongsTo(Employee::class, 'employee_id');
+    }
+
+    public function cashRegister()
+    {
+        return $this->belongsTo(CashRegister::class);
     }
 }

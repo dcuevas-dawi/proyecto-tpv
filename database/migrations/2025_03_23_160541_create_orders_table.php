@@ -20,6 +20,8 @@ return new class extends Migration
             $table->timestamp('closed_at')->nullable();
             $table->foreignId('employee_id')->nullable()->after('table_id')
                 ->constrained('employees')->nullOnDelete();
+            $table->foreignId('cash_register_id')->nullable()->after('employee_id')
+                ->constrained()->nullOnDelete();
             $table->timestamps();
         });
     }

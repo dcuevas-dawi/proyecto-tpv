@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\CashRegister;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Table;
@@ -14,36 +15,36 @@ class HistoricalOrdersSeeder extends Seeder
 {
     public function run(): void
     {
-        // Customizable configuration
-        $user = User::latest()->first(); // Last created user id
-        $daysBack = 365; // Number of days back to generate orders
-        $minOrdersPerDay = 2; // Minimum orders per day
-        $maxOrdersPerDay = 8; // Maximum orders per day
-        $minProductsPerOrder = 1; // Minimum products per order
-        $maxProductsPerOrder = 5; // Maximum products per order
+        // Configuración personalizable
+        $user = User::latest()->first(); // Último usuario creado
+        $daysBack = 365; // Número de días hacia atrás para generar pedidos
+        $minOrdersPerDay = 2; // Mínimo de pedidos por día
+        $maxOrdersPerDay = 8; // Máximo de pedidos por día
+        $minProductsPerOrder = 1; // Mínimo de productos por pedido
+        $maxProductsPerOrder = 5; // Máximo de productos por pedido
 
         if (!$user) {
-            $this->command->error('User not found');
+            $this->command->error('Usuario no encontrado');
             return;
         }
 
-        // Verify that exists as employee
-        $employee = User::where('id', $user->id)->first();
+        // Verificar que existe como empleado
+        $employee = DB::table('employees')->where('user_id', $user->id)->first();
         if (!$employee) {
-            $this->command->error('User does not exist as employee');
+            $this->command->error('El usuario no tiene un empleado asociado');
             return;
         }
 
-        $this->command->info("Generating historical data for establishment: {$user->name}");
+        $this->command->info("Generando datos históricos para el establecimiento: {$user->name}");
 
-        // Get tables and products from the user
+        // Obtener mesas y productos del usuario
         $tables = Table::where('user_id', $user->id)->get();
         if ($tables->isEmpty()) {
-            $this->command->error('User has no tables');
+            $this->command->error('El usuario no tiene mesas');
             return;
         }
 
-        // Verify that tables actually exist
+        // Verificar que las mesas existen
         $validTables = [];
         foreach ($tables as $table) {
             if (Table::find($table->id)) {
@@ -52,7 +53,7 @@ class HistoricalOrdersSeeder extends Seeder
         }
 
         if (empty($validTables)) {
-            $this->command->error('No valid tables');
+            $this->command->error('No hay mesas válidas');
             return;
         }
 
@@ -60,11 +61,11 @@ class HistoricalOrdersSeeder extends Seeder
 
         $products = Product::where('user_id', $user->id)->active()->get();
         if ($products->isEmpty()) {
-            $this->command->error('User has no products');
+            $this->command->error('El usuario no tiene productos');
             return;
         }
 
-        // Verify that products actually exist
+        // Verificar que los productos existen
         $validProducts = [];
         foreach ($products as $product) {
             if (Product::find($product->id)) {
@@ -73,94 +74,152 @@ class HistoricalOrdersSeeder extends Seeder
         }
 
         if (empty($validProducts)) {
-            $this->command->error('No valid products');
+            $this->command->error('No hay productos válidos');
             return;
         }
 
         $products = collect($validProducts);
 
-        $this->command->info("Found {$tables->count()} tables and {$products->count()} valid products");
+        $this->command->info("Encontradas {$tables->count()} mesas y {$products->count()} productos válidos");
 
-        // Generate orders for each day
+        // Generar pedidos para cada día
         $startDate = Carbon::now()->subDays($daysBack)->startOfDay();
-        $endDate = Carbon::now()->subDay()->endOfDay(); // Until yesterday
+        $endDate = Carbon::now()->subDay()->endOfDay(); // Hasta ayer
 
         $currentDate = clone $startDate;
 
         $totalOrders = 0;
+        $totalCashRegisters = 0;
 
-        $this->command->info("Generating orders from {$startDate->format('Y-m-d')} to {$endDate->format('Y-m-d')}");
+        $this->command->info("Generando datos desde {$startDate->format('Y-m-d')} hasta {$endDate->format('Y-m-d')}");
 
         $progressBar = $this->command->getOutput()->createProgressBar($daysBack);
         $progressBar->start();
 
         while ($currentDate <= $endDate) {
-            // Random number of orders for this day
+            // Apertura de caja para el día
+            $cashOpenTime = clone $currentDate;
+            $cashOpenTime->setHour(rand(7, 9))->setMinute(rand(0, 59));
+
+            $cashRegister = $this->createCashRegister($user, $employee, $cashOpenTime);
+            $totalCashRegisters++;
+
+            // Número aleatorio de pedidos para este día
             $ordersToday = random_int($minOrdersPerDay, $maxOrdersPerDay);
+            $dailyTotal = 0;
 
             for ($i = 0; $i < $ordersToday; $i++) {
-                // Create random order
-                $this->createRandomOrder(
+                // Crear pedido aleatorio
+                $orderTotal = $this->createRandomOrder(
                     $user,
                     $tables->random(),
                     $products,
                     $currentDate,
                     $minProductsPerOrder,
-                    $maxProductsPerOrder
+                    $maxProductsPerOrder,
+                    $cashRegister->id,
+                    $cashOpenTime
                 );
 
+                $dailyTotal += $orderTotal;
                 $totalOrders++;
             }
 
-            // Move to next day
+            // Cerrar la caja al final del día
+            $cashCloseTime = clone $currentDate;
+            $cashCloseTime->setHour(rand(21, 23))->setMinute(rand(0, 59));
+
+            $this->closeCashRegister($cashRegister, $dailyTotal, $cashCloseTime);
+
+            // Avanzar al siguiente día
             $currentDate->addDay();
             $progressBar->advance();
         }
 
         $progressBar->finish();
         $this->command->newLine(2);
-        $this->command->info("Process completed: {$totalOrders} orders generated in {$daysBack} days");
+        $this->command->info("Proceso completado: {$totalOrders} pedidos y {$totalCashRegisters} cajas generados en {$daysBack} días");
     }
 
-    private function createRandomOrder($user, $table, $products, $date, $minProducts, $maxProducts)
+    private function createCashRegister($user, $employee, $openTime)
     {
-        // Check that the table exists in the database
+        // Importe inicial de caja aleatorio entre 50 y 200€
+        $openingAmount = rand(50, 200);
+
+        // Crear registro de caja
+        return CashRegister::create([
+            'user_id' => $user->id,
+            'opening_employee_id' => $employee->id,
+            'opening_amount' => $openingAmount,
+            'status' => 'closed', // Ya que son históricos
+            'opened_at' => $openTime,
+            'created_at' => $openTime,
+            'updated_at' => $openTime,
+        ]);
+    }
+
+    private function closeCashRegister($cashRegister, $totalSales, $closeTime)
+    {
+        // Añadir un poco de variación aleatoria al cierre (faltante o sobrante)
+        $randomVariation = (rand(-10, 10) / 10); // Entre -1€ y +1€
+        $realClosingAmount = $cashRegister->opening_amount + $totalSales + $randomVariation;
+        $theoreticalClosingAmount = $cashRegister->opening_amount + $totalSales;
+
+        // Actualizar caja con datos de cierre
+        $cashRegister->update([
+            'closing_employee_id' => $cashRegister->opening_employee_id,
+            'real_closing_amount' => $realClosingAmount,
+            'theoretical_closing_amount' => $theoreticalClosingAmount,
+            'difference' => $realClosingAmount - $theoreticalClosingAmount,
+            'closed_at' => $closeTime,
+            'comments' => $randomVariation != 0 ? 'Diferencia de ' . number_format($randomVariation, 2) . '€' : null,
+            'updated_at' => $closeTime,
+        ]);
+
+        return $cashRegister;
+    }
+
+    private function createRandomOrder($user, $table, $products, $date, $minProducts, $maxProducts, $cashRegisterId, $minTime)
+    {
+        // Verificar que la mesa existe en la base de datos
         $actualTable = Table::find($table->id);
         if (!$actualTable) {
-            $this->command->error("Table with ID {$table->id} does not exist.");
-            return;
+            $this->command->error("La mesa con ID {$table->id} no existe.");
+            return 0;
         }
 
         $employee = DB::table('employees')
             ->where('user_id', $user->id)
             ->first();
 
-        // If we don't find an employee, we can show an error or use an alternative
         if (!$employee) {
-            $this->command->error("No employee found for establishment ID: {$user->id}");
-            $this->command->line("Verify that there are registered employees for this establishment");
-            return; // Exit the function without creating the order
+            $this->command->error("No se encontró un empleado para el establecimiento ID: {$user->id}");
+            return 0;
         }
 
         $employeeId = $employee->id;
 
-        // Create random hours between 8:00 am and 11:00 pm
-        $openingHour = rand(8, 23);
+        // Crear horas aleatorias después de la apertura de caja
+        $openingHour = rand(
+            max($minTime->hour, 10),
+            min(22, $date->copy()->setHour(23)->hour)
+        );
         $openingMinute = rand(0, 59);
 
         $createdAt = clone $date;
         $createdAt->setHour($openingHour)->setMinute($openingMinute)->setSecond(0);
 
-        // The order is closed between 15 minutes and 3 hours later
+        // El pedido se cierra entre 15 minutos y 2 horas después
         $closedAt = clone $createdAt;
-        $closedAt->addMinutes(rand(15, 180));
+        $closedAt->addMinutes(rand(15, 120));
 
         try {
-            // Create the order directly with DB to see exactly which columns you need
+            // Crear el pedido directamente con DB
             $orderId = DB::table('orders')->insertGetId([
                 'table_id' => $table->id,
                 'user_id' => $user->id,
                 'employee_id' => $employeeId,
+                'cash_register_id' => $cashRegisterId, // Asociar a la caja
                 'status' => 'cerrado',
                 'total_price' => 0,
                 'created_at' => $createdAt,
@@ -168,17 +227,13 @@ class HistoricalOrdersSeeder extends Seeder
                 'closed_at' => $closedAt,
             ]);
 
-            // Add random products to the order
-            $productsToAdd = min($maxProducts, $products->count());
-            if ($productsToAdd < $minProducts) {
-                $productsToAdd = $products->count();
-            }
-
+            // Añadir productos aleatorios al pedido
+            $productsToAdd = rand($minProducts, min($maxProducts, $products->count()));
             $selectedProducts = $products->where('active', true)->random(max(1, $productsToAdd));
             $totalPrice = 0;
 
             foreach ($selectedProducts as $product) {
-                // Verify that the product exists
+                // Verificar que el producto existe
                 if (!Product::find($product->id)) {
                     continue;
                 }
@@ -187,7 +242,7 @@ class HistoricalOrdersSeeder extends Seeder
                 $priceAtTime = $product->price;
                 $subtotal = $quantity * $priceAtTime;
 
-                // Add product to the order
+                // Añadir producto al pedido
                 DB::table('order_product')->insert([
                     'order_id' => $orderId,
                     'product_id' => $product->id,
@@ -200,17 +255,16 @@ class HistoricalOrdersSeeder extends Seeder
                 $totalPrice += $subtotal;
             }
 
-            // Update the total price
+            // Actualizar el precio total
             DB::table('orders')
                 ->where('id', $orderId)
                 ->update(['total_price' => $totalPrice]);
 
+            return $totalPrice;
+
         } catch (\Exception $e) {
-            $this->command->error("Error creating the order: " . $e->getMessage());
-            // Print details for debugging
-            $this->command->line("Table ID: {$table->id}");
-            $this->command->line("User ID: {$user->id}");
-            $this->command->line("Employee ID: {$employeeId}");
+            $this->command->error("Error al crear el pedido: " . $e->getMessage());
+            return 0;
         }
     }
 }

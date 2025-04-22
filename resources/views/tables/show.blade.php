@@ -1,7 +1,17 @@
 <x-app-layout>
     <div class="container">
         <h1 class="text-3xl font-semibold text-gray-800 mb-3">Mesa {{ $table->number }}</h1>
+        @if(session('error'))
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-2 mb-2" role="alert">
+                <p>{{ session('error') }}</p>
+            </div>
+        @endif
 
+        @if(session('success'))
+            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-2 mb-2" role="alert">
+                <p>{{ session('success') }}</p>
+            </div>
+        @endif
         <div class="flex gap-4">
             <!-- Panel izquierdo: Productos organizados por categorías -->
             @if ($order && $order->status == 'abierto')
