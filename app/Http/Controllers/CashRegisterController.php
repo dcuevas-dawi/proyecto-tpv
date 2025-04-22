@@ -140,11 +140,17 @@ class CashRegisterController extends Controller
         $startDate = $request->start_date ?? Carbon::now()->subDays(7)->format('Y-m-d');
         $endDate = $request->end_date ?? Carbon::now()->format('Y-m-d');
 
-        // Aplicar filtro de fechas
-        $query->whereBetween('opened_at', [
-            $startDate . ' 00:00:00',
-            $endDate . ' 23:59:59'
-        ]);
+        // Extender la fecha final para incluir la madrugada del siguiente día (hasta las 6 AM)
+        $endDatePlus = Carbon::parse($endDate)->addDay()->format('Y-m-d');
+
+        // Aplicar filtro de fechas, considerando como "día de trabajo" desde las 06:00 hasta las 06:00 del día siguiente
+        $query->where(function($q) use ($startDate, $endDatePlus) {
+            // Registros que se abren en el rango normal
+            $q->whereBetween('opened_at', [
+                $startDate . ' 06:00:00',
+                $endDatePlus . ' 05:59:59'
+            ]);
+        });
 
         // Ordenar y paginar
         $cashRegisters = $query->orderBy('opened_at', 'desc')

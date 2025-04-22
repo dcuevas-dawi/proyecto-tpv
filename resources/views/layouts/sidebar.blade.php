@@ -21,12 +21,13 @@
             Tickets
         </a>
 
-        <a href="{{ route('cash-register.history') }}" class="block py-2 px-4 rounded {{ request()->routeIs('cash-register.*') ? 'bg-primary text-white' : 'hover:bg-gray-100' }}">
-            Caja
-        </a>
         @endif
 
         @if(session('employee_role') == 2 || session('employee_role') == 1)
+            <a href="{{ route('cash-register.history') }}" class="block py-2 px-4 rounded {{ request()->routeIs('cash-register.*') ? 'bg-primary text-white' : 'hover:bg-gray-100' }}">
+                Caja
+            </a>    
+
             <a href="{{ route('accounting.index') }}" class="block py-2 px-4 rounded {{ request()->routeIs('accounting.*') ? 'bg-primary text-white' : 'hover:bg-gray-100' }}">
                 Contabilidad
             </a>

@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="py-2">
-        <div class="max-w-full mx-auto px-2 sm:px-3 lg:px-4">
+        <div class="max-w-full mx-auto px-3 lg:px-4">
             <h1 class="text-2xl font-bold text-center text-gray-800 mb-3">
                 Historial de Caja
             </h1>
@@ -20,7 +20,7 @@
 
                 <!-- Filtro por fechas -->
                 <div class="bg-gray-50 p-3 border-b border-gray-200">
-                    <form action="{{ route('cash-register.history') }}" method="GET" class="flex flex-col md:flex-row gap-2 items-end">
+                    <form action="{{ route('cash-register.history') }}" method="GET" class="flex flex-row gap-2 items-end">
                         <div class="flex-1">
                             <label for="start_date" class="block text-sm font-medium text-gray-700 mb-1">Fecha inicial:</label>
                             <input type="date" id="start_date" name="start_date" value="{{ request('start_date', date('Y-m-d', strtotime('-7 days'))) }}"

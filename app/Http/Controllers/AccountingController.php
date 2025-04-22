@@ -41,29 +41,34 @@ class AccountingController extends Controller
 
     private function getAccountingData($startDate, $endDate, $period)
     {
+        // Define el tiempo de cierre de jornada (hora en que termina un día de negocio)
+        // Usando 6am como hora de corte para considerar que un día termina
+        $cutoffHour = 6;
+
         // Define the date expression based on the period (always for SQLite)
         $dateExpression = "";
         $periodFormat = "";
 
         switch ($period) {
             case 'daily':
-                $dateExpression = "strftime('%Y-%m-%d', closed_at)";
+                // Consideramos que el día de negocio va hasta las 6am del día siguiente
+                $dateExpression = "date(datetime(closed_at, '-{$cutoffHour} hours'))";
                 $periodFormat = 'd/m/Y';
                 break;
             case 'weekly':
-                $dateExpression = "strftime('%Y-W%W', closed_at)";
+                $dateExpression = "strftime('%Y-W%W', datetime(closed_at, '-{$cutoffHour} hours'))";
                 $periodFormat = 'semana';
                 break;
             case 'monthly':
-                $dateExpression = "strftime('%Y-%m', closed_at)";
+                $dateExpression = "strftime('%Y-%m', datetime(closed_at, '-{$cutoffHour} hours'))";
                 $periodFormat = 'mes';
                 break;
             case 'quarterly':
-                $dateExpression = "strftime('%Y-', closed_at) || ((CAST(strftime('%m', closed_at) AS INTEGER) + 2) / 3)";
+                $dateExpression = "strftime('%Y-', datetime(closed_at, '-{$cutoffHour} hours')) || ((CAST(strftime('%m', datetime(closed_at, '-{$cutoffHour} hours')) AS INTEGER) + 2) / 3)";
                 $periodFormat = 'trimestre';
                 break;
             case 'yearly':
-                $dateExpression = "strftime('%Y', closed_at)";
+                $dateExpression = "strftime('%Y', datetime(closed_at, '-{$cutoffHour} hours'))";
                 $periodFormat = 'año';
                 break;
         }
@@ -71,8 +76,11 @@ class AccountingController extends Controller
         // Query using Eloquent with conditions for SQLite
         $query = Order::where('status', 'cerrado');
 
+        // Ajustar las fechas del filtro para incluir las primeras horas del día siguiente
+        $endDateForQuery = Carbon::parse($endDate)->addDay()->format('Y-m-d');
+
         $query->whereRaw("strftime('%Y-%m-%d', closed_at) >= ?", [$startDate])
-            ->whereRaw("strftime('%Y-%m-%d', closed_at) <= ?", [$endDate]);
+            ->whereRaw("strftime('%Y-%m-%d', closed_at) <= ?", [$endDateForQuery]);
 
         $results = $query->selectRaw("{$dateExpression} as period_key")
             ->selectRaw('SUM(total_price) as total_sales')
