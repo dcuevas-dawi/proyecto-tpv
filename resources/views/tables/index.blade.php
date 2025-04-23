@@ -24,8 +24,8 @@
             @endforeach
         </div>
         @if(session('employee_role') == 1)
-            <div class="flex flex-col gap-4 mt-6 text-gray-900 dark:text-gray-100">
-                <a href="{{ route('tables.manage') }}" class="w-fit text-7xl text-white bg-primary hover:bg-primaryLight focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+            <div class="flex flex-col gap-4 mt-6 text-gray-900">
+                <a href="{{ route('tables.manage') }}" class="w-fit text-7xl text-white bg-primary hover:bg-primaryLight focus:ring-4 focus:outline-none focus:ring-blue-300  shadow-lg font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
                     Gestionar Mesas
                 </a>
             </div>
