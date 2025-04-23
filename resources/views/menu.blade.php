@@ -1,59 +1,40 @@
-<!-- Main menu view -->
-
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Menú') }}
-        </h2>
-    </x-slot>
+    <div class="min-h-full flex flex-col items-center justify-center">
+        <div class="text-center max-w-4xl mx-auto px-6">
+            <!-- Logo grande -->
+            <div class="mb-8">
+                <img src="{{ asset('favicon.png') }}" alt="Logo" class="h-48 w-auto mx-auto">
+            </div>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                @if (session('employee_role') == 1)
+            <!-- Nombre de la aplicación -->
+            <h1 class="text-5xl font-bold text-primary mb-6">
+                {{ config('app.name') }}
+            </h1>
 
-                    <div class="flex flex-col gap-4 p-6 text-gray-900">
-                        <a href="{{ route('tables.index') }}" class="w-fit text-7xl text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300  shadow-lg shadow-blue-500/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                            Mesas
-                        </a>
-                    </div>
+            <!-- Mensaje de bienvenida -->
+            <p class="text-2xl text-gray-600 mb-8">
+                Sistema de gestión para tu negocio
+            </p>
 
-                    <div class="flex flex-col gap-4 p-6 text-gray-900">
-                        <a href="{{ route('products.index') }}" class="w-fit text-7xl text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300  shadow-lg shadow-blue-500/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                            Productos
-                        </a>
-                    </div>
+            <!-- Reloj en tiempo real -->
+            <div class="bg-white p-6 rounded-xl shadow-md mb-8">
+                <div id="current-time" class="text-4xl font-bold text-gray-800"></div>
+                <div id="current-date" class="text-xl text-gray-600 mt-2"></div>
+            </div>
 
-                @endif
+            <!-- Mensaje informativo -->
+            <p class="text-gray-500 mt-6">
+                Utiliza las opciones del menú lateral para navegar por la aplicación
+            </p>
 
-                <div class="flex flex-col gap-4 p-6 text-gray-900">
-                    <a href="{{ route('orders.history') }}" class="w-fit text-7xl text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300  shadow-lg shadow-blue-500/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                        Historial de Tickets
-                    </a>
-                </div>
-
-                @if (session('employee_role') == 1)
-                    <div class="flex flex-col gap-4 p-6 text-gray-900">
-                        <a href="{{ route('accounting.index') }}" class="w-fit text-7xl text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300  shadow-lg shadow-blue-500/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                            Contabilidad
-                        </a>
-                    </div>
-
-                    <div class="flex flex-col gap-4 p-6 text-gray-900">
-                        <a href="{{ route('stablishment_details.edit') }}" class="w-fit text-7xl text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300  shadow-lg shadow-blue-500/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                            Datos del Establecimiento
-                        </a>
-                    </div>
-
-                        <div class="flex flex-col gap-4 p-6 text-gray-900">
-                            <a href="{{ route('employee.create') }}" class="w-fit text-7xl text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 shadow-lg shadow-blue-500/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                                Crear empleado
-                            </a>
-                        </div>
-
-                @endif
-
+            <!-- Versión -->
+            <div class="mt-12 text-sm text-gray-400">
+                Versión 1.0.0
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script src="{{ asset('js/menu.js') }}"></script>
+    @endpush
 </x-app-layout>
