@@ -15,6 +15,7 @@ class Order extends Model
         'status',
         'total_price',
         'closed_at',
+        'employee_id',
         'cash_register_id',
     ];
 

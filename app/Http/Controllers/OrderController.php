@@ -44,6 +44,7 @@ class OrderController extends Controller
                 'user_id' => auth()->id(),
                 'status' => 'abierto',
                 'total_price' => 0,
+                'employee_id' => session('employee_id'),
                 'cash_register_id' => $openCashRegister->id,
             ]);
 
@@ -129,7 +130,6 @@ class OrderController extends Controller
 
         // Update the order status to closed (cerrado)
         $order->status = 'cerrado';
-        $order->employee_id = session('employee_id');
         $order->save();
 
         // Return JSON response with the ticket URL
