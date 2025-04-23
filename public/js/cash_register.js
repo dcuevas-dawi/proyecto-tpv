@@ -1,3 +1,4 @@
+// Javascript for the cash register
 document.addEventListener('DOMContentLoaded', function() {
     const display = document.getElementById('display');
     const hiddenInput = document.getElementById('opening_amount');
@@ -8,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let hasDecimal = false;
     let decimalDigits = 0;
 
-    // Actualizar la pantalla y el campo oculto
+    // Update the display and hidden input
     function updateDisplay() {
         // Formatear para mostrar siempre 2 decimales
         const numValue = parseFloat(currentValue);
@@ -16,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
         hiddenInput.value = numValue.toFixed(2);
     }
 
-    // Manejar clics en botones numéricos
+    // Manage clicks on numeric buttons
     numKeys.forEach(key => {
         key.addEventListener('click', function() {
             const digit = this.dataset.key;
@@ -47,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Limpiar el valor
+    // Clear the value
     clearBtn.addEventListener('click', function() {
         currentValue = '0';
         hasDecimal = false;
@@ -55,6 +56,6 @@ document.addEventListener('DOMContentLoaded', function() {
         updateDisplay();
     });
 
-    // Inicializar la pantalla
+    // Initialize the display
     updateDisplay();
 });

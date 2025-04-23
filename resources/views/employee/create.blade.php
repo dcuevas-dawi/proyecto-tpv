@@ -1,3 +1,5 @@
+<!-- VIew for creating a new employee -->
+
 <x-app-layout>
     <div class="w-full h-auto p-6 bg-gray-100">
         <div class="flex items-center justify-center mb-6">
@@ -64,7 +66,7 @@
             </form>
         </div>
 
-        <!-- Lista de empleados actuales -->
+        <!-- Actual employees list -->
         <div class="max-w-xl mx-auto bg-white rounded-lg shadow-lg p-6">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">Empleados Actuales</h2>
 

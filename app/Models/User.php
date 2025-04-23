@@ -46,21 +46,25 @@ class User extends Authenticatable  // User representa cada establecimiento
         ];
     }
 
+    // Define the relationship with the Employee model
     public function employees()
     {
         return $this->hasMany(Employee::class);
     }
 
+    // Define the relationship with the Table model
     public function tables()
     {
         return $this->hasMany(Table::class);
     }
 
-    // Relación con productos
+    // Define the relationship with the Product model
     public function products()
     {
         return $this->hasMany(Product::class);
     }
+
+    // Define the relationship with the StablishmentDetails model
     public function stablishmentDetails()
     {
         return $this->hasOne(StablishmentDetails::class);

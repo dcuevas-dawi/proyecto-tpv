@@ -1,3 +1,5 @@
+<!-- View for opening the cash register -->
+
 <x-app-layout>
     <div class="py-2">
         <div class="max-w-full mx-auto px-3 lg:px-4">
@@ -33,7 +35,7 @@
                         @enderror
                     </div>
 
-                    <!-- Teclado numérico estilo login -->
+                    <!-- Numpad -->
                     <div class="grid grid-cols-3 gap-2 mb-6 max-w-xs mx-auto">
                         <button type="button" class="num-key bg-blue-50 hover:bg-blue-100 py-4 rounded text-xl font-medium aspect-square flex items-center justify-center" data-key="7">7</button>
                         <button type="button" class="num-key bg-blue-50 hover:bg-blue-100 py-4 rounded text-xl font-medium aspect-square flex items-center justify-center" data-key="8">8</button>

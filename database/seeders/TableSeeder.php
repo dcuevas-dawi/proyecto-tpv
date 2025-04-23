@@ -13,6 +13,8 @@ class TableSeeder extends Seeder
     /**
      * Run the database seeds.
      */
+
+    // Seeder for the tables, it runs always when a new user (stablishment) is created
     public function run()
     {
         $user = User::latest()->first(); // Last created user id

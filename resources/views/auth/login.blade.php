@@ -1,3 +1,5 @@
+<!-- Main login app view -->
+
 <x-guest-layout>
     <form method="POST" action="{{ route('login') }}" class="w-full">
         @csrf

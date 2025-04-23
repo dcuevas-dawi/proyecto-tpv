@@ -21,6 +21,8 @@ class UserFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
+    // Factory to create users, now is no used, only for testing
     public function definition(): array
     {
         return [

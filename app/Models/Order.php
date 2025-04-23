@@ -18,37 +18,37 @@ class Order extends Model
         'cash_register_id',
     ];
 
-    /**
-     * Relación con la mesa
-     */
+    // Define the relationship with the Table model
     public function table()
     {
         return $this->belongsTo(Table::class);
     }
 
-    /**
-     * Relación con los productos
-     */
+    // Define the relationship with the Product model
     public function products()
     {
         return $this->belongsToMany(Product::class)->withPivot('quantity', 'price_at_time');
     }
 
+    // Define the relationship with the User model
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    // Return open orders
     public function scopeOpen($query)
     {
         return $query->where('status', 'abierto');
     }
 
+    // Define the relationship with the Employee model
     public function employee()
     {
         return $this->belongsTo(Employee::class, 'employee_id');
     }
 
+    // Define the relationship with the CashRegister model
     public function cashRegister()
     {
         return $this->belongsTo(CashRegister::class);

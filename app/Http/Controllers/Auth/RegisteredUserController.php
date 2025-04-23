@@ -44,6 +44,8 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
+        // When a user is registered, we execute 2 seeders
+
         // This executes a seeder to create 10 tables
         Artisan::call('db:seed', [
             '--class' => 'TableSeeder',
@@ -55,6 +57,8 @@ class RegisteredUserController extends Controller
             '--class' => 'ProductSeeder',
             '--force' => true,
         ]);
+
+        // Automatically log in the user and redirect to menu
 
         Auth::login($user);
 

@@ -1,3 +1,5 @@
+<!-- Main register app view -->
+
 <x-guest-layout>
     <form method="POST" action="{{ route('register') }}" class="w-full">
         @csrf

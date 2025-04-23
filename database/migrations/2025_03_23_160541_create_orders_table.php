@@ -9,6 +9,8 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+
+    // This migration creates the 'orders' table, which stores information about orders placed by users.
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
@@ -19,9 +21,9 @@ return new class extends Migration
             $table->decimal('total_price', 8, 2)->default(0);
             $table->timestamp('closed_at')->nullable();
             $table->foreignId('employee_id')->nullable()->after('table_id')
-                ->constrained('employees')->nullOnDelete();
+                ->constrained('employees')->nullOnDelete(); // Employee who closed the order
             $table->foreignId('cash_register_id')->nullable()->after('employee_id')
-                ->constrained()->nullOnDelete();
+                ->constrained()->nullOnDelete(); // Cash register where the order was opened
             $table->timestamps();
         });
     }

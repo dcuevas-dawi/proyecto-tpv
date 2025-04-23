@@ -18,15 +18,19 @@ class Product extends Model
         'active'
     ];
 
+    // Return the products that are active
     public function scopeActive($query)
     {
         return $query->where('active', true);
     }
 
+    // Define the relationship with the User model
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
+    // Define the relationship with the Order model
     public function orders()
     {
         return $this->belongsToMany(Order::class)->withPivot('quantity', 'price_at_time');

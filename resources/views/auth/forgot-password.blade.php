@@ -1,3 +1,5 @@
+<!-- Forgot Password Template -->
+
 <x-guest-layout>
     <div class="mb-4 text-sm text-gray-600">
         ¿Olvidaste tu contraseña? Introduce tu correo electrónico y te enviaremos un enlace para que puedas crear una nueva.

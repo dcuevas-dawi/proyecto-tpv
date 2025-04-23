@@ -1,3 +1,5 @@
+<!-- View for accounting -->
+
 <x-app-layout>
     <div class="w-full h-auto p-6 bg-gray-100">
         <div class="flex items-center justify-center mb-6">
@@ -41,7 +43,7 @@
             </form>
         </div>
 
-        <!-- Resumen -->
+        <!-- Summary -->
         <div class="grid grid-cols-2 gap-6">
             <div class="p-6">
                 <h3 class="text-xl font-semibold mb-4 text-gray-800">Total ventas</h3>
@@ -53,7 +55,7 @@
             </div>
         </div>
 
-        <!-- Tabla de datos -->
+        <!-- Data table -->
         @if(count($data['data']) > 0)
             <div class="overflow-x-auto rounded-lg shadow-lg">
                 <table class="w-full bg-white border border-gray-200 rounded-lg">

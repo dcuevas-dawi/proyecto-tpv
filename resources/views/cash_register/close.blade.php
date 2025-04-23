@@ -1,3 +1,5 @@
+<!-- View for closing the cash register -->
+
 <x-app-layout>
     <div class="py-2">
         <div class="max-w-full mx-auto px-4">

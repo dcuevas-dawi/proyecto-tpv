@@ -1,3 +1,5 @@
+<!-- View for list all products, with filters and actions -->
+
 <x-app-layout>
     <div class="w-full h-auto p-4 bg-gray-100">
         <div class="flex items-center justify-center mb-4">
@@ -24,7 +26,6 @@
             </div>
 
             <div class="bg-white overflow-hidden shadow-lg rounded-lg p-3">
-                <!-- Filtros simplificados con verde como color principal -->
                 <div class="mb-3 flex flex-wrap gap-2">
                     <a href="{{ route('products.index', ['filter' => 'all']) }}"
                        class="flex items-center justify-center bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md text-center shadow transition duration-200 {{ $filter == 'all' ? 'ring-2 ring-green-300' : '' }}">

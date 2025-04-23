@@ -11,6 +11,8 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      */
+
+    // Seeder for the database, now is no used, only for testing
     public function run(): void
     {
         // User::factory(10)->create();

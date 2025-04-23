@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+
+    // This migration creates the 'stablishment_details' table, which stores information about the establishment.
     public function up(): void
     {
         Schema::create('stablishment_details', function (Blueprint $table) {

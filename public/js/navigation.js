@@ -1,4 +1,4 @@
-// Delay for dropdown menu to appear and no flicker
+// Delay for dropdown menu to appear and prevent flicker
 
 setTimeout( function() {
     document.querySelector('.dropdown-menu').classList.remove('hidden');

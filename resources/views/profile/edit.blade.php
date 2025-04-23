@@ -1,3 +1,5 @@
+<!-- Layout for edit profile page, contains 3 partials for updating profile information, password, and deleting user -->
+
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">

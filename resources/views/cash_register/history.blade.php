@@ -1,3 +1,5 @@
+<!-- View for recovering the history of cash registers -->
+
 <x-app-layout>
     <div class="py-2">
         <div class="max-w-full mx-auto px-3 lg:px-4">
@@ -18,7 +20,7 @@
                     </div>
                 @endif
 
-                <!-- Filtro por fechas -->
+                <!-- Filter by dates -->
                 <div class="bg-gray-50 p-3 border-b border-gray-200">
                     <form action="{{ route('cash-register.history') }}" method="GET" class="flex flex-row gap-2 items-end">
                         <div class="flex-1">
@@ -39,7 +41,7 @@
                     </form>
                 </div>
 
-                <!-- Tabla de historial -->
+                <!-- Historical table -->
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-100">
@@ -87,14 +89,14 @@
                     </table>
                 </div>
 
-                <!-- Paginación si existe -->
+                <!-- Pagination, if exists -->
                 @if(isset($cashRegisters) && $cashRegisters->hasPages())
                     <div class="px-3 py-2 bg-white border-t border-gray-200">
                         {{ $cashRegisters->withQueryString()->links() }}
                     </div>
                 @endif
 
-                <!-- Botones de navegación -->
+                <!-- Navigation buttons -->
                 <div class="flex justify-center space-x-3 p-2 bg-gray-50 border-t border-gray-200">
                     <a href="{{ route('cash-register.open') }}" class="inline-flex items-center px-3 py-1 bg-green-600 hover:bg-green-700 text-white font-medium rounded-md transition duration-300">
                         <i class="fas fa-cash-register mr-1"></i> Abrir Caja

@@ -1,3 +1,5 @@
+<!-- View to recover the history of tickets -->
+
 <x-app-layout>
     <div class="w-full h-auto p-6 bg-gray-100">
         <div class="flex items-center justify-center mb-6">

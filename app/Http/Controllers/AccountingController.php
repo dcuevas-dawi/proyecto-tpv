@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class AccountingController extends Controller
 {
+    // Show the accounting report form
     public function index()
     {
         // Get actual date
@@ -22,6 +23,7 @@ class AccountingController extends Controller
         return view('accounting.index', compact('data', 'startDate', 'endDate', 'period'));
     }
 
+    // Process the accounting report
     public function report(Request $request)
     {
         $request->validate([
@@ -41,17 +43,17 @@ class AccountingController extends Controller
 
     private function getAccountingData($startDate, $endDate, $period)
     {
-        // Define el tiempo de cierre de jornada (hora en que termina un día de negocio)
-        // Usando 6am como hora de corte para considerar que un día termina
+        // Define the cutoff hour for the business day (6am)
+        // Using 6am as the cutoff hour to consider that a day ends
         $cutoffHour = 6;
 
-        // Define the date expression based on the period (always for SQLite)
+        // We will use SQLite date functions to group the data
         $dateExpression = "";
         $periodFormat = "";
 
         switch ($period) {
             case 'daily':
-                // Consideramos que el día de negocio va hasta las 6am del día siguiente
+                // We consider that the business day goes until 6am of the next day
                 $dateExpression = "date(datetime(closed_at, '-{$cutoffHour} hours'))";
                 $periodFormat = 'd/m/Y';
                 break;
@@ -76,7 +78,7 @@ class AccountingController extends Controller
         // Query using Eloquent with conditions for SQLite
         $query = Order::where('status', 'cerrado');
 
-        // Ajustar las fechas del filtro para incluir las primeras horas del día siguiente
+        // Adjust the filter dates to include the first hours of the next day
         $endDateForQuery = Carbon::parse($endDate)->addDay()->format('Y-m-d');
 
         $query->whereRaw("strftime('%Y-%m-%d', closed_at) >= ?", [$startDate])
@@ -115,9 +117,7 @@ class AccountingController extends Controller
         ];
     }
 
-    /**
-     * Formats the period label according to type
-     */
+    // Format the period label based on the type
     private function formatPeriodLabel($periodKey, $periodType, $format)
     {
         try {

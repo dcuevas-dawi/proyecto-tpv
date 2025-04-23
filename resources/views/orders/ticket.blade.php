@@ -1,4 +1,5 @@
-<!-- resources/views/orders/ticket.blade.php -->
+<!-- Ticket html for printing a finished order -->
+
 <!DOCTYPE html>
 <html>
     <head>

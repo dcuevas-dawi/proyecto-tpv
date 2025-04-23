@@ -9,6 +9,8 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+
+    // This migration creates the 'order_product' table, which is a pivot table for the many-to-many relationship between orders and products.
     public function up()
     {
         Schema::create('order_product', function (Blueprint $table) {
@@ -16,7 +18,7 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->integer('quantity');
-            $table->decimal('price_at_time', 8, 2);
+            $table->decimal('price_at_time', 8, 2); // Price of the product at the time of the order, it can be different from the current price
             $table->timestamps();
         });
     }

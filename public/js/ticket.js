@@ -1,5 +1,7 @@
+// Set styles for the ticket
+
 window.onload = function() {
-    // Configuración de opciones de impresión
+    // Printing options
     const style = document.createElement('style');
     style.textContent = `
         @page {
@@ -12,7 +14,7 @@ window.onload = function() {
     const mediaQueryList = window.matchMedia('print');
     mediaQueryList.addListener(function(mql) {
         if (!mql.matches) {
-            // Después de imprimir o cancelar
+            // After printing or canceling
             setTimeout(function() {
                 window.close();
             }, 100);

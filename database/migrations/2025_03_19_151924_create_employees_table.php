@@ -9,6 +9,8 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+
+    // This migration creates the 'employees' table, which stores information about employees associated with a user.
     public function up()
     {
         Schema::create('employees', function (Blueprint $table) {

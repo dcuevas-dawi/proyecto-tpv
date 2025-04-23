@@ -5,16 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+// Logic for the menu, aoviding include this in the web.php
 class MenuController extends Controller
 {
     public function menu()
     {
-        // Si empleados == 0, redirige a crear el primer empleado
+        // If employees == 0, redirect to create the first employee
         if (Auth::user()->employees()->count() === 0) {
             return redirect()->route('employee.create.owner');
         }
 
-        // Si ya hay empleados, redirige al menú, sinó al login de empleados
+        // If there are employees, redirect to the menu, if not to the employee login
         if (session('employee_role')) {
             return view('menu');
         } else {

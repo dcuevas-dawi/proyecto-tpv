@@ -7,17 +7,21 @@ use App\Models\Employee;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class EmployeeLoginController extends Controller  // Once we have created the owner, we use this controller to create other users
+// Once we have created the owner, we use this controller to create other users
+class EmployeeLoginController extends Controller
 {
 
+    // Show the login form for employees
     public function showLoginForm()
     {
         $employees = Employee::where('user_id', auth()->user()->id)->get();
         return view('employee.login', compact('employees'));
     }
 
+    // Process the login request
     public function login(Request $request)
     {
+        // Validate the request
         $request->validate([
             'employee_id' => 'required|exists:employees,id',
             'employee_pin' => 'required',
@@ -27,8 +31,10 @@ class EmployeeLoginController extends Controller  // Once we have created the ow
             'employee_pin.required' => 'El PIN es obligatorio.',
         ]);
 
+        // Find the employee by ID
         $employee = Employee::find($request->employee_id);
 
+        // Check if the employee exists and if the PIN matches
         if ($employee && Hash::check($request->employee_pin, $employee->pin)) {
             session([
                 'employee_id' => $employee->id,
@@ -42,21 +48,14 @@ class EmployeeLoginController extends Controller  // Once we have created the ow
         return back()->withErrors(['employee_pin' => 'PIN incorrecto.']);
     }
 
+    // Logout the employee
     public function logout()
     {
         session()->forget(['employee_id', 'employee_name', 'employee_role']);
         return redirect()->route('menu')->with('status', 'Empleado deslogueado');
     }
 
-    public function menu()
-    {
-        if (Auth::user()->employees()->count() === 0) {
-            return redirect()->route('employee.create.owner');
-        }
-
-        return view('menu');
-    }
-
+    // Show the form to create a new employee
     public function create()
     {
         $employees = Employee::where('user_id', Auth::id())->get();
@@ -64,9 +63,11 @@ class EmployeeLoginController extends Controller  // Once we have created the ow
         return view('employee.create', compact('employees'));
     }
 
+    // Store a new employee
     public function store(Request $request)
     {
         try {
+            // Validate the request
             $request->validate([
                 'name' => [
                     'required',
@@ -87,6 +88,7 @@ class EmployeeLoginController extends Controller  // Once we have created the ow
                 'role.in' => 'El rol seleccionado no es válido.',
             ]);
 
+            // Create the employee
             Employee::create([
                 'user_id' => Auth::id(),
                 'name' => $request->name,
@@ -102,8 +104,9 @@ class EmployeeLoginController extends Controller  // Once we have created the ow
         }
     }
 
-    function checkUser($attribute, $value, $fail) {  // Función para comprobar si ya existe un usuario con el mismo nombre
-        // Check if an employee with this name already exists for the current user
+    // Check if the employee name already exists
+    function checkUser($attribute, $value, $fail) {
+
         if (Employee::where('user_id', Auth::id())
             ->where('name', $value)
             ->exists()) {

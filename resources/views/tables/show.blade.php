@@ -1,3 +1,5 @@
+<!-- View for individual table and order management -->
+
 <x-app-layout>
     <div class="container">
         <h1 class="text-3xl font-semibold text-gray-800 mb-3">Mesa {{ $table->number }}</h1>
@@ -13,13 +15,13 @@
             </div>
         @endif
         <div class="flex gap-4">
-            <!-- Panel izquierdo: Productos organizados por categorías -->
+            <!-- Left panel: add products -->
             @if ($order && $order->status == 'abierto')
                 <div class="w-2/3 h-[85vh] overflow-y-auto pr-2">
                     <div class="bg-white p-4 rounded-lg shadow-lg">
                         <h2 class="text-2xl font-semibold text-gray-700 mb-3 sticky top-0 bg-white pt-2 pb-2">Añadir Productos</h2>
 
-                        <!-- Bebidas -->
+                        <!-- Drinks -->
                         <div class="mb-6">
                             <h3 class="text-xl font-medium text-gray-700 mb-2 border-b pb-2 sticky top-14 bg-white">Bebidas</h3>
                             <div class="grid grid-cols-5 gap-3">
@@ -41,7 +43,7 @@
                             </div>
                         </div>
 
-                        <!-- Comidas -->
+                        <!-- Food -->
                         <div class="mb-6">
                             <h3 class="text-xl font-medium text-gray-700 mb-2 border-b pb-2 sticky top-14 bg-white">Comidas</h3>
                             <div class="grid grid-cols-5 gap-3">
@@ -63,7 +65,7 @@
                             </div>
                         </div>
 
-                        <!-- Otros -->
+                        <!-- Others -->
                         <div>
                             <h3 class="text-xl font-medium text-gray-700 mb-2 border-b pb-2 sticky top-14 bg-white">Otros</h3>
                             <div class="grid grid-cols-5 gap-3">
@@ -88,7 +90,7 @@
                 </div>
             @endif
 
-            <!-- Panel derecho: Lista de pedido -->
+            <!-- Right panel: Order list -->
             <div class="w-1/3 bg-white p-4 rounded-lg shadow-lg">
                 <h2 class="text-2xl font-semibold text-gray-700 mb-3">Pedido Actual</h2>
 

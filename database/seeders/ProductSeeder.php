@@ -12,6 +12,8 @@ class ProductSeeder extends Seeder
     /**
      * Run the database seeds.
      */
+
+    // Seeder for the products, it runs always when a new user (stablishment) is created
     public function run(): void
     {
         $user = User::latest()->first(); // Last created user id
@@ -38,8 +40,10 @@ class ProductSeeder extends Seeder
             ['name' => 'Limonada', 'description' => 'Limonada fresca', 'price' => 2.00, 'category' => 'drink'],
             ['name' => 'Bocadillo de calamares', 'description' => 'Bocadillo con calamares fritos', 'price' => 4.50, 'category' => 'food'],
             ['name' => 'Pulpo a la gallega', 'description' => 'Pulpo cocido con pimentón', 'price' => 12.00, 'category' => 'food'],
+
         ];
 
+        // Create products for the last user (stablishment)
         foreach ($products as $product) {
             Product::create([
                 'user_id' => $user->id,

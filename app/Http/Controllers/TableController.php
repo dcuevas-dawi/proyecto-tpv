@@ -9,7 +9,7 @@ use App\Models\Order;
 
 class TableController extends Controller
 {
-    //Lis all tables
+    //List all active tables
     public function index()
     {
         $tables = Table::where('user_id', auth()->id())
@@ -18,11 +18,12 @@ class TableController extends Controller
         return view('tables.index', compact('tables'));
     }
 
-    // Show a specific table
+    // Show a specific table view
     public function show($number)
     {
+        // Recover table by number and user_id to ensure it belongs to the user
         $table = Table::where('number', $number)
-            ->where('user_id', auth()->user()->id) // Asegura que la mesa pertenece al establecimiento del usuario
+            ->where('user_id', auth()->user()->id)
             ->firstOrFail();
 
         if (!$table) {
@@ -32,13 +33,13 @@ class TableController extends Controller
         // Look for acrtive order
         $order = $table->orders()->open()->first();
 
-        // List all products for the user
+        // List all products that belong to the active user
         $products = Product::where('user_id', auth()->user()->id)->active()->get();
 
         return view('tables.show', compact('table', 'order', 'products', 'table'));
     }
 
-    // Show all tables for owner
+    // Show all tables for the owner
     public function manage()
     {
         if (session('employee_role') != 1) {
@@ -55,10 +56,10 @@ class TableController extends Controller
     {
         $userId = auth()->id();
 
-        // Buscar el número más alto de mesa que haya tenido este usuario
+        // Search for the highest table number that this user has had
         $maxNumber = Table::where('user_id', $userId)->max('number') ?? 0;
 
-        // Crear la nueva mesa con el siguiente número
+        // Create the new table with the next number
         Table::create([
             'user_id' => $userId,
             'number' => $maxNumber + 1
@@ -72,7 +73,7 @@ class TableController extends Controller
     {
         $table = Table::findOrFail($id);
 
-        // Verificar si la mesa está ocupada (status = 1)
+        // Check if the table is occupied (status = 1)
         if ($table->status == 1) {
             return redirect()->route('tables.manage')->with('error', 'No se puede desactivar una mesa con un pedido abierto.');
         }

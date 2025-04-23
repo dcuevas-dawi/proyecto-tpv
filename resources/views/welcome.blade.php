@@ -1,3 +1,5 @@
+<!-- Default template for Laravel 12 with Tailwind CSS and Vite, not used -->
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>

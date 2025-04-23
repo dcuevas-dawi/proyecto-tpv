@@ -10,6 +10,7 @@ use App\Models\CashRegister;
 
 class OrderController extends Controller
 {
+    // Opening a new order for a table
     public function create($tableId)
     {
         $table = Table::find($tableId);
@@ -18,7 +19,7 @@ class OrderController extends Controller
             return redirect()->back()->with('error', 'La mesa no existe.');
         }
 
-        // Verificar si hay una caja abierta
+        // Check if there is a cash register open
         $openCashRegister = CashRegister::where('user_id', auth()->id())
             ->where('status', 'open')
             ->first();
@@ -28,15 +29,16 @@ class OrderController extends Controller
                 ->with('error', 'Debe abrir la caja antes de crear un pedido.');
         }
 
-        // Verificar si ya existe un pedido abierto para esta mesa
+        // Check if there is already an open order for this table
         $existingOrder = $table->orders()->where('status', 'open')->first();
 
+        // If there is no existing order, create a new one
         if (!$existingOrder) {
-            // Cambiar el estado de la mesa a "ocupada" solo si no hay pedido abierto
+            // Change the table status to "occupied" only if there is no open order
             $table->status = 1; // 1 = ocupada
             $table->save();
 
-            // Crear un nuevo pedido solo si no existe uno abierto
+            // Create a new order
             Order::create([
                 'table_id' => $table->id,
                 'user_id' => auth()->id(),
@@ -49,10 +51,11 @@ class OrderController extends Controller
                 ->with('success', 'Nuevo pedido creado');
         }
 
-        // Si ya existe un pedido abierto, simplemente redirige
+        // If, for any reason, an order exists, we can redirect to the table view
         return redirect()->route('tables.show', ['number' => $table->number]);
     }
 
+    // Show order details
     public function edit($orderId)
     {
         $order = Order::findOrFail($orderId);
@@ -64,31 +67,29 @@ class OrderController extends Controller
 
     public function addProduct(Request $request, $tableId)
     {
-        // Validar el producto y la cantidad
+        // Check product and quantity
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1',
         ]);
 
-        // Obtener la mesa y el pedido asociado
+        // Obtain the table, the associated order and the product
         $table = Table::findOrFail($tableId);
         $order = $table->orders()->open()->first();
-
-        // Obtener el producto
         $product = Product::findOrFail($request->product_id);
 
-        // Verificar si el producto ya está en el pedido
+        // Check if the product is in the current order
         $existingProduct = $order->products()->where('product_id', $product->id)->first();
 
         if ($existingProduct) {
-            // Si el producto ya está, actualizar la cantidad
+            // If the product is already in the order, update the quantity
             $order->products()->updateExistingPivot($product->id, [
                 'quantity' => $existingProduct->pivot->quantity + $request->quantity,
                 'price_at_time' => $product->price,
                 'updated_at' => now(),
             ]);
         } else {
-            // Si no, agregarlo como un nuevo producto
+            // If not, add it as a new product
             $order->products()->attach($product->id, [
                 'quantity' => $request->quantity,
                 'price_at_time' => $product->price,
@@ -97,7 +98,7 @@ class OrderController extends Controller
             ]);
         }
 
-        // Actualizar el precio total del pedido
+        // Update the total price of the order
         $order->total_price = $order->products->sum(function ($product) {
             return $product->pivot->quantity * $product->pivot->price_at_time;
         });
@@ -108,11 +109,11 @@ class OrderController extends Controller
 
     public function closeOrder(Request $request, $tableId)
     {
-        // Obtener la mesa y el pedido asociado
+        // Obtain the table and the associated order
         $table = Table::findOrFail($tableId);
         $order = $table->orders()->open()->first();
 
-        // Si no hay pedido abierto, devolver error
+        // If not open order, return error
         if (!$order) {
             return response()->json([
                 'success' => false,
@@ -120,18 +121,18 @@ class OrderController extends Controller
             ]);
         }
 
-        // Cambiar el estado de la mesa a "libre"
+        // Taable is now free
         $table->status = 0; // 0 = libre
         $table->save();
 
         $order->closed_at = now();
 
-        // Actualizar el estado del pedido a cerrado (pagado)
+        // Update the order status to closed (cerrado)
         $order->status = 'cerrado';
         $order->employee_id = session('employee_id');
         $order->save();
 
-        // Devolver respuesta JSON con la URL del ticket
+        // Return JSON response with the ticket URL
         return response()->json([
             'success' => true,
             'message' => 'Pedido cerrado correctamente',
@@ -169,7 +170,6 @@ class OrderController extends Controller
     public function removeProduct($orderId, $productId)
     {
         $order = Order::findOrFail($orderId);
-
 
         if (!$order->products()->where('product_id', $productId)->exists()) {
             return redirect()->back()->with('error', 'El producto no está en el pedido');
@@ -211,7 +211,7 @@ class OrderController extends Controller
         return view('orders.history', compact('orders'));
     }
 
-    // Get orders by date range
+    // Get order history by date range
     public function getOrdersByDate(Request $request)
     {
         $start_date = $request->input('start_date');
@@ -226,7 +226,7 @@ class OrderController extends Controller
         return view('orders.history', compact('orders', 'start_date', 'end_date'));
     }
 
-    // View ticket for a order
+    // View ticket for an order
     public function viewTicket($orderId)
     {
         $order = Order::with(['products', 'table', 'employee'])->findOrFail($orderId);

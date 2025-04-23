@@ -11,11 +11,13 @@ class CreateTablesTable extends Migration
      *
      * @return void
      */
+
+    // This migration creates the 'tables' table, which stores information about tables associated with a user (stablishment).
     public function up()
     {
         Schema::create('tables', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('user_id'); // Id de user (stablishment)
+            $table->unsignedInteger('user_id'); // Id user (stablishment)
             $table->integer('number');
             $table->boolean('status')->default(false); // False=Free or busy=true
             $table->boolean('active')->default(true); // False=Inactive or True=Active

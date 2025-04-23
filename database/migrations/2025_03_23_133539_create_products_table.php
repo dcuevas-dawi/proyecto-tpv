@@ -11,11 +11,13 @@ class CreateProductsTable extends Migration
      *
      * @return void
      */
+
+    //
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('user_id'); // Id de user (que representa el establecimiento)
+            $table->unsignedInteger('user_id'); // Id user (stablishment)
             $table->string('name');
             $table->text('description')->nullable();
             $table->decimal('price', 8, 2);

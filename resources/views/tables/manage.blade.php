@@ -1,3 +1,5 @@
+<!-- View for managing tables by owner -->
+
 <x-app-layout>
     <div class="container mx-auto p-6">
         <h2 class="text-3xl font-bold mb-6">Gestión de Mesas</h2>

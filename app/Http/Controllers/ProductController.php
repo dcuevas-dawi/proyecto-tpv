@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
+
+    // Show all products or filtered products
     public function index(Request $request)
     {
         $filter = $request->input('filter', 'all');
@@ -40,13 +42,16 @@ class ProductController extends Controller
         return view('products.index', compact('products', 'filter'));
     }
 
+    // Show the form to create a new product
     public function create()
     {
         return view('products.create');
     }
 
+    // Store a new product
     public function store(Request $request)
     {
+        // Validate the request
         $request->validate([
             'name' => 'required|string|max:100',
             'description' => 'nullable|string|max:500',
@@ -63,6 +68,7 @@ class ProductController extends Controller
             'category.in' => 'La categoría seleccionada no es válida'
         ]);
 
+        // Create the product
         Product::create([
             'user_id' => Auth::id(),
             'name' => $request->name,
@@ -74,6 +80,7 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('success', 'Producto creado correctamente');
     }
 
+    // Show the form to edit a product
     public function edit(Product $product)
     {
         // Verificar que el producto pertenece al usuario actual
@@ -84,6 +91,7 @@ class ProductController extends Controller
         return view('products.edit', compact('product'));
     }
 
+    // Update a product
     public function update(Request $request, Product $product)
     {
         // Check product owner
@@ -91,6 +99,7 @@ class ProductController extends Controller
             return redirect()->route('products.index')->with('error', 'No tienes permiso para editar este producto');
         }
 
+        // Validate the request
         $request->validate([
             'name' => 'required|string|max:100',
             'description' => 'nullable|string|max:500',
@@ -107,6 +116,7 @@ class ProductController extends Controller
             'category.in' => 'La categoría seleccionada no es válida'
         ]);
 
+        // Update the product
         $product->update([
             'name' => $request->name,
             'description' => $request->description,
@@ -117,6 +127,7 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('success', 'Producto actualizado correctamente');
     }
 
+    // Set a product as inactive doing soft delete
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
@@ -130,6 +141,8 @@ class ProductController extends Controller
 
         return redirect()->route('products.index')->with('success', 'Producto eliminado correctamente');
     }
+
+    // Restore a soft-deleted product
     public function restore($id)
     {
         $product = Product::withoutGlobalScope('active')->findOrFail($id);

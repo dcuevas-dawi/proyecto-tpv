@@ -12,6 +12,8 @@ use App\Http\Controllers\StablishmentDetailsController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CashRegisterController;
 
+
+// Check if the user is authenticated and redirect to the menu or login page
 Route::get('/', function () {
     if (Auth::check()) {
         return redirect()->route('menu');
@@ -23,36 +25,36 @@ Route::get('/menu', function () {
     return view('menu');
 })->middleware(['auth', 'verified'])->name('menu');
 
+// Default Breeze routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
+// App routes
 Route::middleware(['auth'])->group(function () {
-    // Ruta principal al menú, hay un controlador que verifica si hay empleados para redirigir a crear el primer empleado o al menú
+    // Main route to the menu, there is a controller that checks if there are employees to redirect to create the first employee or to the menu
     Route::get('/menu', [MenuController::class, 'menu'])->name('menu');
 
-    // Primer acceso, crea primer empleado: el dueño con todos los permisos
+    // First access, create the first employee: the owner with all permissions
     Route::get('/employee/create-owner', [FirstEmployeeSetupController::class, 'showOwnerForm'])->name('employee.create.owner');
     Route::post('/employee/store-owner', [FirstEmployeeSetupController::class, 'storeOwner'])->name('employee.store.owner');
 
-    // Crear otros empleados (si ya existe dueño)
+    // Create other employees (if the owner already exists)
     Route::get('/employee/create', [EmployeeLoginController::class, 'create'])->name('employee.create');
     Route::post('/employee/store', [EmployeeLoginController::class, 'store'])->name('employee.store');
 
-    // Employees login
-    Route::get('/employee/login', function () {
-        return view('employee.login');
-    })->name('employee.login');
+    // Employee login
+    Route::post('/employee/login', [EmployeeLoginController::class, 'login'])->name('employee.authenticate');
+    Route::get('/employee/login', [EmployeeLoginController::class, 'showLoginForm'])->name('employee.login');
 
+    // Employees logout
     Route::post('/employee/logout', function () {
         session()->forget(['employee_name', 'employee_role']);
         return redirect()->route('employee.login');
     })->name('employee.logout');
-
-    Route::post('/employee/login', [EmployeeLoginController::class, 'login'])->name('employee.authenticate');
-    Route::get('/employee/login', [EmployeeLoginController::class, 'showLoginForm'])->name('employee.login');
 
     // Tables manage routes
     Route::get('/tables/manage', [TableController::class, 'manage'])->name('tables.manage');
@@ -61,7 +63,7 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/tables/activate/{id}', [TableController::class, 'activate'])->name('tables.activate');
 
     // Tables regular usage
-    Route::resource('tables', TableController::class); // Resource manage all the CRUD routes for the TableController
+    Route::resource('tables', TableController::class); // Resource manages all the CRUD routes for the TableController
     Route::get('/tables/{number}', [TableController::class, 'show'])->name('tables.show');
     Route::post('/tables/{tableId}/close-order', [OrderController::class, 'closeOrder'])->name('tables.closeOrder');
 
@@ -72,7 +74,8 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/orders/{orderId}/products/{productId}', [OrderController::class, 'updateQuantity'])->name('orders.updateQuantity');
     Route::delete('/orders/{orderId}/products/{productId}', [OrderController::class, 'removeProduct'])->name('orders.removeProduct');
     Route::get('/orders/{orderId}/print', [OrderController::class, 'printTicket'])->name('orders.print');
-    // History
+
+    // Order history
     Route::get('/orders/history', [OrderController::class, 'history'])->name('orders.history');
     Route::get('/orders/by-date', [OrderController::class, 'getOrdersByDate'])->name('orders.byDate');
     Route::get('/orders/{orderId}/view', [OrderController::class, 'viewTicket'])->name('orders.view');

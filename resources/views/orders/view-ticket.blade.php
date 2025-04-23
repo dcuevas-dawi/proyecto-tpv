@@ -1,3 +1,5 @@
+<!-- View for viewing ticket details -->
+
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">

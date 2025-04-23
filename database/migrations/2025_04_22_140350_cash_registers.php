@@ -9,6 +9,8 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+
+    // This migration creates the 'cash_registers' table, which stores information about cash registers associated with a user (stablishment).
     public function up(): void
     {
         Schema::create('cash_registers', function (Blueprint $table) {

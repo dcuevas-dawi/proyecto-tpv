@@ -1,3 +1,5 @@
+// This script handles the date range selection for the accounting form
+
 document.addEventListener('DOMContentLoaded', function() {
     // Get form elements
     const periodSelect = document.getElementById('period');

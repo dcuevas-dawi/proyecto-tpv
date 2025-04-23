@@ -1,3 +1,5 @@
+<!-- View for creating a new product -->
+
 <x-app-layout>
     <div class="w-full h-auto p-4 bg-gray-100">
         <div class="flex items-center justify-center mb-4">

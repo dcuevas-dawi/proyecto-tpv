@@ -7,15 +7,19 @@ use App\Models\Employee;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class FirstEmployeeSetupController extends Controller  // Clase para crear el primer usuario: el Dueño, es algo diferente al de crear un empleado
+// Class to create the first user: the Owner, it's a bit different from creating an employee
+class FirstEmployeeSetupController extends Controller
 {
+    // Show the form to create the first employee (owner)
     public function showOwnerForm()
     {
         return view('employee.create_owner');
     }
 
+    // Process the form to create the first employee (owner)
     public function storeOwner(Request $request)
     {
+        // Validate the request
         $request->validate([
             'name' => 'required|string|max:255',
             'pin' => 'required|digits:6|confirmed',
@@ -27,13 +31,15 @@ class FirstEmployeeSetupController extends Controller  // Clase para crear el pr
             'pin.confirmed' => 'La confirmación del PIN no coincide.',
         ]);
 
+        // Create the first employee (owner)
         $employee = Employee::create([
             'user_id' => Auth::id(),
             'name' => $request->name,
             'pin' => bcrypt($request->pin),
-            'role' => 1, // 1 = Owner, El primer empleado siempre será un dueño
+            'role' => 1, // 1 = Owner, First employee always be owner
         ]);
 
+        // Log the owner in automatically
         session([
             'employee_id' => $employee->id,
             'employee_name' => $employee->name,

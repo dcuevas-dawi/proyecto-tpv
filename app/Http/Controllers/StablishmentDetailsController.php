@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 class StablishmentDetailsController extends Controller
 {
+    // Show the form to edit stablishment details
     public function edit()
     {
         $user = Auth::user();
@@ -24,10 +25,12 @@ class StablishmentDetailsController extends Controller
         return view('stablishment_details.edit', compact('stablishmentDetails'));
     }
 
+    // Store or update stablishment details
     public function update(Request $request)
     {
         $user = Auth::user();
 
+        // Validate the request
         $validated = $request->validate([
             'commercial_name' => 'nullable|string|max:255',
             'legal_name' => 'nullable|string|max:255',
@@ -41,6 +44,7 @@ class StablishmentDetailsController extends Controller
             'email' => 'nullable|email|max:255',
         ]);
 
+        // If the user has a stablishment details record, update it or create a new one
         if ($user->stablishmentDetails) {
             $user->stablishmentDetails->update($validated);
         } else {

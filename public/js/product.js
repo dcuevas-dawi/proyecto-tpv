@@ -1,9 +1,9 @@
-// Gestión de categorías de productos
+// Management of product categories
 function initCategorySelection() {
     const categoryOptions = document.querySelectorAll('.category-option');
     if (!categoryOptions.length) return;
 
-    // Inicializar el estado
+    // Initielize the state
     categoryOptions.forEach(option => {
         const radio = option.querySelector('input[type="radio"]');
         if (radio.checked) {
@@ -11,24 +11,25 @@ function initCategorySelection() {
         }
     });
 
-    // Manejar selección
+    // Section manager
     categoryOptions.forEach(option => {
         option.addEventListener('click', function() {
             const radio = this.querySelector('input[type="radio"]');
             radio.checked = true;
 
-            // Quitar selección de todos
+            // Leave the selected one
             categoryOptions.forEach(opt => {
                 opt.classList.remove('border-yellow-500', 'border-red-500', 'border-purple-500', 'bg-yellow-100', 'bg-red-100', 'bg-purple-100');
                 opt.classList.add('border-yellow-300', 'border-red-300', 'border-purple-300');
             });
 
-            // Resaltar el seleccionado
+            // Highlight the selected one
             highlightSelected(this);
         });
     });
 }
 
+// Highlight the selected category option
 function highlightSelected(option) {
     const radio = option.querySelector('input[type="radio"]');
     option.classList.remove('border-yellow-300', 'border-red-300', 'border-purple-300');
@@ -42,7 +43,7 @@ function highlightSelected(option) {
     }
 }
 
-// Confirmaciones para eliminar y restaurar productos
+// Confirmation for deleting and restoring products
 function initConfirmActions() {
     // Función para confirmar eliminación
     window.confirmDelete = function(button) {
@@ -51,7 +52,7 @@ function initConfirmActions() {
         }
     };
 
-    // Función para confirmar restauración
+    // Function to confirm restoration
     window.confirmRestore = function(button) {
         if (confirm('¿Estás seguro de que deseas restaurar este producto?')) {
             button.closest('form').submit();
@@ -59,7 +60,7 @@ function initConfirmActions() {
     };
 }
 
-// Validación de formularios de productos
+// This function initializes the form validation
 function initFormValidation() {
     const productForm = document.getElementById('product-form');
     if (!productForm) return;
@@ -68,7 +69,7 @@ function initFormValidation() {
         let isValid = true;
         let firstError = null;
 
-        // Validar nombre
+        // Name validation
         const nameInput = document.getElementById('name');
         const nameError = document.getElementById('name-error');
 
@@ -86,7 +87,7 @@ function initFormValidation() {
             nameError.classList.add('hidden');
         }
 
-        // Validar precio
+        // Price validation
         const priceInput = document.getElementById('price');
         const priceError = document.getElementById('price-error');
         const price = parseFloat(priceInput.value.replace(',', '.'));
@@ -115,7 +116,7 @@ function initFormValidation() {
             priceError.classList.add('hidden');
         }
 
-        // Validar categoría
+        // Category validation
         const categorySelected = document.querySelector('input[name="category"]:checked');
         const categoryError = document.getElementById('category-error');
 
@@ -128,7 +129,7 @@ function initFormValidation() {
             categoryError.classList.add('hidden');
         }
 
-        // Validar descripción (opcional)
+        // Description validation (optional)
         const descriptionInput = document.getElementById('description');
         const descriptionError = document.getElementById('description-error');
 
@@ -141,7 +142,7 @@ function initFormValidation() {
             descriptionError.classList.add('hidden');
         }
 
-        // Si hay errores, prevenir envío y hacer scroll al primer error
+        // If there are errors, prevent submission and scroll to the first error
         if (!isValid) {
             e.preventDefault();
             if (firstError) {
@@ -151,7 +152,7 @@ function initFormValidation() {
         }
     });
 
-    // Validación en tiempo real
+    // Real-time validation
     const inputs = productForm.querySelectorAll('input, textarea');
     inputs.forEach(input => {
         input.addEventListener('input', function() {
@@ -163,7 +164,7 @@ function initFormValidation() {
     });
 }
 
-// Inicialización cuando el DOM está listo
+// Initialize when the DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     initCategorySelection();
     initConfirmActions();

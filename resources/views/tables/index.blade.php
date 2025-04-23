@@ -1,3 +1,5 @@
+<!-- Overview of all active tables -->
+
 <x-app-layout>
     <div class="container mx-auto p-6">
         <h2 class="text-4xl font-bold text-center mb-8">Mesas Disponibles</h2>
@@ -13,7 +15,6 @@
                                     {{ $table->status == 0 ? 'Libre' : 'Ocupada' }}
                                 </span>
                             </p>
-                            <!-- Botón para seleccionar la mesa -->
                             <span class="btn-select w-fit self-end bg-primary hover:bg-primaryLight text-white px-4 py-2 rounded-lg shadow-md transition duration-300 ease-in-out">
                                 Seleccionar
                             </span>

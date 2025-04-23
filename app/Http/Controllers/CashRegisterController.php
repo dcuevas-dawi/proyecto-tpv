@@ -9,10 +9,10 @@ use Carbon\Carbon;
 
 class CashRegisterController extends Controller
 {
-    // Mostrar formulario para abrir caja
+    // Show form to open cash register
     public function openForm()
     {
-        // Verificar si ya hay una caja abierta
+        // Check if there is already an open cash register
         $existingOpenCashRegister = CashRegister::where('user_id', auth()->id())
             ->where('status', 'open')
             ->first();
@@ -24,14 +24,14 @@ class CashRegisterController extends Controller
         return view('cash_register.open');
     }
 
-    // Procesar apertura de caja
+    // Process open cash register
     public function open(Request $request)
     {
         $request->validate([
             'opening_amount' => 'required|numeric|min:0',
         ]);
 
-        // Verificar si ya hay una caja abierta
+        // Check if there is already an open cash register
         $existingOpenCashRegister = CashRegister::where('user_id', auth()->id())
             ->where('status', 'open')
             ->first();
@@ -40,7 +40,7 @@ class CashRegisterController extends Controller
             return redirect()->route('cash-register.history')->with('error', 'Ya hay una caja abierta');
         }
 
-        // Crear la apertura de caja
+        // Create a new cash register
         CashRegister::create([
             'user_id' => auth()->id(),
             'opening_employee_id' => session('employee_id'),
@@ -52,10 +52,10 @@ class CashRegisterController extends Controller
         return redirect()->route('cash-register.history')->with('success', 'Caja abierta correctamente');
     }
 
-    // Mostrar formulario para cerrar caja
+    // Show form to close cash register
     public function closeForm()
     {
-        // Obtener la caja abierta actual
+        // Get the current open cash register
         $cashRegister = CashRegister::where('user_id', auth()->id())
             ->where('status', 'open')
             ->first();
@@ -64,7 +64,7 @@ class CashRegisterController extends Controller
             return redirect()->route('cash-register.history')->with('error', 'No hay ninguna caja abierta');
         }
 
-        // Verificar si hay pedidos abiertos
+        // Check if there are open orders
         $openOrders = Order::where('status', '!=', 'cerrado')
             ->where('cash_register_id', $cashRegister->id)
             ->count();
@@ -73,7 +73,7 @@ class CashRegisterController extends Controller
             return redirect()->route('cash-register.history')->with('error', 'No se puede cerrar la caja mientras hay pedidos abiertos');
         }
 
-        // Calcular el monto teórico de cierre
+        // Calculate the theoretical closing amount
         $totalSales = Order::where('cash_register_id', $cashRegister->id)
             ->where('status', 'cerrado')
             ->sum('total_price');
@@ -83,7 +83,7 @@ class CashRegisterController extends Controller
         return view('cash_register.close', compact('cashRegister', 'theoreticalClosingAmount', 'totalSales'));
     }
 
-    // Procesar cierre de caja
+    // Process close cash register
     public function close(Request $request)
     {
         $request->validate([
@@ -91,7 +91,7 @@ class CashRegisterController extends Controller
             'comments' => 'nullable|string',
         ]);
 
-        // Obtener la caja abierta actual
+        // Obtain the current open cash register
         $cashRegister = CashRegister::where('user_id', auth()->id())
             ->where('status', 'open')
             ->first();
@@ -100,7 +100,7 @@ class CashRegisterController extends Controller
             return redirect()->route('cash-register.history')->with('error', 'No hay ninguna caja abierta');
         }
 
-        // Verificar si hay pedidos abiertos
+        // Check if there are open orders
         $openOrders = Order::where('status', '!=', 'cerrado')
             ->where('cash_register_id', $cashRegister->id)
             ->count();
@@ -109,7 +109,7 @@ class CashRegisterController extends Controller
             return redirect()->route('cash-register.history')->with('error', 'No se puede cerrar la caja mientras hay pedidos abiertos');
         }
 
-        // Calcular el monto teórico de cierre
+        // Calculate the theoretical closing amount
         $totalSales = Order::where('cash_register_id', $cashRegister->id)
             ->where('status', 'cerrado')
             ->sum('total_price');
@@ -117,7 +117,7 @@ class CashRegisterController extends Controller
         $theoreticalClosingAmount = $cashRegister->opening_amount + $totalSales;
         $difference = $request->real_closing_amount - $theoreticalClosingAmount;
 
-        // Actualizar la caja con los datos de cierre
+        // Update the cash register with closing data
         $cashRegister->update([
             'closing_employee_id' => session('employee_id'),
             'closed_at' => now(),
@@ -131,19 +131,19 @@ class CashRegisterController extends Controller
         return redirect()->route('cash-register.history')->with('success', 'Caja cerrada correctamente');
     }
 
-    // Listar historial de cajas
+    // List cash register history
     public function history(Request $request)
     {
         $query = CashRegister::where('user_id', auth()->id());
 
-        // Establecer fechas predeterminadas si no se proporcionan
+        // Establish default dates if not provided
         $startDate = $request->start_date ?? Carbon::now()->subDays(7)->format('Y-m-d');
         $endDate = $request->end_date ?? Carbon::now()->format('Y-m-d');
 
-        // Extender la fecha final para incluir la madrugada del siguiente día (hasta las 6 AM)
+        // Extend the end date to include the next day (till 05:59:59)
         $endDatePlus = Carbon::parse($endDate)->addDay()->format('Y-m-d');
 
-        // Aplicar filtro de fechas, considerando como "día de trabajo" desde las 06:00 hasta las 06:00 del día siguiente
+        // Apply date filter, considering "working day" from 06:00 to 06:00 the next day
         $query->where(function($q) use ($startDate, $endDatePlus) {
             // Registros que se abren en el rango normal
             $q->whereBetween('opened_at', [
@@ -152,7 +152,7 @@ class CashRegisterController extends Controller
             ]);
         });
 
-        // Ordenar y paginar
+        // Order and paginate results
         $cashRegisters = $query->orderBy('opened_at', 'desc')
             ->paginate(15);
 
