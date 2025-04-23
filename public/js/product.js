@@ -1,58 +1,15 @@
-// Management of product categories
-function initCategorySelection() {
-    const categoryOptions = document.querySelectorAll('.category-option');
-    if (!categoryOptions.length) return;
+// Product Management
 
-    // Initielize the state
-    categoryOptions.forEach(option => {
-        const radio = option.querySelector('input[type="radio"]');
-        if (radio.checked) {
-            highlightSelected(option);
-        }
-    });
-
-    // Section manager
-    categoryOptions.forEach(option => {
-        option.addEventListener('click', function() {
-            const radio = this.querySelector('input[type="radio"]');
-            radio.checked = true;
-
-            // Leave the selected one
-            categoryOptions.forEach(opt => {
-                opt.classList.remove('border-yellow-500', 'border-red-500', 'border-purple-500', 'bg-yellow-100', 'bg-red-100', 'bg-purple-100');
-                opt.classList.add('border-yellow-300', 'border-red-300', 'border-purple-300');
-            });
-
-            // Highlight the selected one
-            highlightSelected(this);
-        });
-    });
-}
-
-// Highlight the selected category option
-function highlightSelected(option) {
-    const radio = option.querySelector('input[type="radio"]');
-    option.classList.remove('border-yellow-300', 'border-red-300', 'border-purple-300');
-
-    if (radio.value === 'food') {
-        option.classList.add('border-yellow-500', 'bg-yellow-100');
-    } else if (radio.value === 'drink') {
-        option.classList.add('border-red-500', 'bg-red-100');
-    } else {
-        option.classList.add('border-purple-500', 'bg-purple-100');
-    }
-}
-
-// Confirmation for deleting and restoring products
+// Edit and delete confirmations
 function initConfirmActions() {
-    // Función para confirmar eliminación
+    // Function for delete confirmation
     window.confirmDelete = function(button) {
         if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
             button.closest('form').submit();
         }
     };
 
-    // Function to confirm restoration
+    // Function for restore confirmation
     window.confirmRestore = function(button) {
         if (confirm('¿Estás seguro de que deseas restaurar este producto?')) {
             button.closest('form').submit();
@@ -60,12 +17,31 @@ function initConfirmActions() {
     };
 }
 
-// This function initializes the form validation
+// Initialize form validation
 function initFormValidation() {
     const productForm = document.getElementById('product-form');
-    if (!productForm) return;
+
+    if (!productForm) {
+        console.log('No se encontró el formulario de producto');
+        return;
+    }
+
+    // Add error elements if they don't exist
+    ['name', 'price', 'category', 'description'].forEach(field => {
+        if (!document.getElementById(`${field}-error`)) {
+            const errorSpan = document.createElement('span');
+            errorSpan.id = `${field}-error`;
+            errorSpan.className = 'text-red-500 text-xs hidden';
+            const fieldElement = document.getElementById(field);
+            if (fieldElement && fieldElement.parentNode) {
+                fieldElement.parentNode.appendChild(errorSpan);
+            }
+        }
+    });
 
     productForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
         let isValid = true;
         let firstError = null;
 
@@ -73,87 +49,98 @@ function initFormValidation() {
         const nameInput = document.getElementById('name');
         const nameError = document.getElementById('name-error');
 
-        if (!nameInput.value.trim()) {
-            nameError.textContent = 'El nombre del producto es obligatorio';
-            nameError.classList.remove('hidden');
-            isValid = false;
-            firstError = firstError || nameInput;
-        } else if (nameInput.value.length > 100) {
-            nameError.textContent = 'El nombre no puede tener más de 100 caracteres';
-            nameError.classList.remove('hidden');
-            isValid = false;
-            firstError = firstError || nameInput;
-        } else {
-            nameError.classList.add('hidden');
+        if (nameInput && nameError) {
+            if (!nameInput.value.trim()) {
+                nameError.textContent = 'El nombre del producto es obligatorio';
+                nameError.classList.remove('hidden');
+                isValid = false;
+                firstError = firstError || nameInput;
+            } else if (nameInput.value.length > 100) {
+                nameError.textContent = 'El nombre no puede tener más de 100 caracteres';
+                nameError.classList.remove('hidden');
+                isValid = false;
+                firstError = firstError || nameInput;
+            } else {
+                nameError.classList.add('hidden');
+            }
         }
 
         // Price validation
         const priceInput = document.getElementById('price');
         const priceError = document.getElementById('price-error');
-        const price = parseFloat(priceInput.value.replace(',', '.'));
 
-        if (!priceInput.value.trim()) {
-            priceError.textContent = 'El precio es obligatorio';
-            priceError.classList.remove('hidden');
-            isValid = false;
-            firstError = firstError || priceInput;
-        } else if (isNaN(price)) {
-            priceError.textContent = 'El precio debe ser un número';
-            priceError.classList.remove('hidden');
-            isValid = false;
-            firstError = firstError || priceInput;
-        } else if (price < 0.01) {
-            priceError.textContent = 'El precio mínimo es 0,01 €';
-            priceError.classList.remove('hidden');
-            isValid = false;
-            firstError = firstError || priceInput;
-        } else if (price > 9999.99) {
-            priceError.textContent = 'El precio máximo es 9.999,99 €';
-            priceError.classList.remove('hidden');
-            isValid = false;
-            firstError = firstError || priceInput;
-        } else {
-            priceError.classList.add('hidden');
+        if (priceInput && priceError) {
+            const price = parseFloat(priceInput.value.replace(',', '.'));
+
+            if (!priceInput.value.trim()) {
+                priceError.textContent = 'El precio es obligatorio';
+                priceError.classList.remove('hidden');
+                isValid = false;
+                firstError = firstError || priceInput;
+            } else if (isNaN(price)) {
+                priceError.textContent = 'El precio debe ser un número';
+                priceError.classList.remove('hidden');
+                isValid = false;
+                firstError = firstError || priceInput;
+            } else if (price < 0.01) {
+                priceError.textContent = 'El precio mínimo es 0,01 €';
+                priceError.classList.remove('hidden');
+                isValid = false;
+                firstError = firstError || priceInput;
+            } else if (price > 9999.99) {
+                priceError.textContent = 'El precio máximo es 9.999,99 €';
+                priceError.classList.remove('hidden');
+                isValid = false;
+                firstError = firstError || priceInput;
+            } else {
+                priceError.classList.add('hidden');
+            }
         }
 
         // Category validation
-        const categorySelected = document.querySelector('input[name="category"]:checked');
+        const categorySelect = document.getElementById('category');
         const categoryError = document.getElementById('category-error');
 
-        if (!categorySelected) {
-            categoryError.textContent = 'Debes seleccionar una categoría';
-            categoryError.classList.remove('hidden');
-            isValid = false;
-            firstError = firstError || document.querySelector('.category-option');
-        } else {
-            categoryError.classList.add('hidden');
+        if (categorySelect && categoryError) {
+            if (!categorySelect.value) {
+                categoryError.textContent = 'Debes seleccionar una categoría';
+                categoryError.classList.remove('hidden');
+                isValid = false;
+                firstError = firstError || categorySelect;
+            } else {
+                categoryError.classList.add('hidden');
+            }
         }
 
         // Description validation (optional)
         const descriptionInput = document.getElementById('description');
         const descriptionError = document.getElementById('description-error');
 
-        if (descriptionInput.value.length > 500) {
-            descriptionError.textContent = 'La descripción no puede tener más de 500 caracteres';
-            descriptionError.classList.remove('hidden');
-            isValid = false;
-            firstError = firstError || descriptionInput;
-        } else {
-            descriptionError.classList.add('hidden');
+        if (descriptionInput && descriptionError) {
+            if (descriptionInput.value.length > 500) {
+                descriptionError.textContent = 'La descripción no puede tener más de 500 caracteres';
+                descriptionError.classList.remove('hidden');
+                isValid = false;
+                firstError = firstError || descriptionInput;
+            } else {
+                descriptionError.classList.add('hidden');
+            }
         }
 
         // If there are errors, prevent submission and scroll to the first error
         if (!isValid) {
-            e.preventDefault();
             if (firstError) {
                 firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 firstError.focus();
             }
+        } else {
+            // If the form is valid, submit it
+            productForm.submit();
         }
     });
 
-    // Real-time validation
-    const inputs = productForm.querySelectorAll('input, textarea');
+    // Validation for inputs before submission
+    const inputs = productForm.querySelectorAll('input, textarea, select');
     inputs.forEach(input => {
         input.addEventListener('input', function() {
             const errorElement = document.getElementById(`${this.id}-error`);
@@ -164,9 +151,9 @@ function initFormValidation() {
     });
 }
 
+
 // Initialize when the DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
-    initCategorySelection();
     initConfirmActions();
     initFormValidation();
 });

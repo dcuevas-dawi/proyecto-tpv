@@ -10,7 +10,7 @@ class MenuController extends Controller
 {
     public function menu()
     {
-        // If employees == 0, redirect to create the first employee
+        // If employees == 0, redirect to create the first employee, the owner
         if (Auth::user()->employees()->count() === 0) {
             return redirect()->route('employee.create.owner');
         }

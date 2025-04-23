@@ -14,7 +14,7 @@
             </div>
 
             <div class="bg-white overflow-hidden shadow-lg rounded-lg p-3">
-                <form action="{{ route('products.store') }}" method="POST">
+                <form id="product-form" action="{{ route('products.store') }}" method="POST">
                     @csrf
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div>
@@ -25,6 +25,7 @@
                             @error('name')
                             <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
+                            <span id="name-error" class="text-red-500 text-xs hidden"></span>
                         </div>
 
                         <div>
@@ -35,6 +36,7 @@
                             @error('price')
                             <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
+                            <span id="price-error" class="text-red-500 text-xs hidden"></span>
                         </div>
 
                         <div>
@@ -50,6 +52,7 @@
                             @error('category')
                             <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
+                            <span id="category-error" class="text-red-500 text-xs hidden"></span>
                         </div>
                     </div>
 
@@ -60,6 +63,7 @@
                         @error('description')
                         <span class="text-red-500 text-xs">{{ $message }}</span>
                         @enderror
+                        <span id="description-error" class="text-red-500 text-xs hidden"></span>
                     </div>
 
                     <div class="flex justify-end">
