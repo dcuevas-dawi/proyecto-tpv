@@ -14,7 +14,7 @@
             </div>
 
             <div class="bg-white overflow-hidden shadow-lg rounded-lg p-3">
-                <form id="product-form" action="{{ route('products.update', $product) }}" method="POST">
+                <form id="product-form" action="{{ route('products.update', $product->product_id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="grid grid-cols-2 gap-4 mb-4">

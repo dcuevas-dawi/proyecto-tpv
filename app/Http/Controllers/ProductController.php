@@ -68,9 +68,15 @@ class ProductController extends Controller
             'category.in' => 'La categoría seleccionada no es válida'
         ]);
 
+        $userId = auth()->id();
+
+        // Search for the highest product number that this user has had
+        $maxNumber = Product::where('user_id', $userId)->max('product_id') ?? 0;
+
         // Create the product
         Product::create([
             'user_id' => Auth::id(),
+            'product_id' => $maxNumber + 1,
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
@@ -81,23 +87,23 @@ class ProductController extends Controller
     }
 
     // Show the form to edit a product
-    public function edit(Product $product)
+    public function edit($productId)
     {
-        // Verificar que el producto pertenece al usuario actual
-        if ($product->user_id !== Auth::id()) {
-            return redirect()->route('products.index')->with('error', 'No tienes permiso para editar este producto');
-        }
+        // Search for the product by user_id and product_id
+        $product = Product::where('user_id', Auth::id())
+            ->where('product_id', $productId)
+            ->firstOrFail();
 
         return view('products.edit', compact('product'));
     }
 
     // Update a product
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $productId)
     {
-        // Check product owner
-        if ($product->user_id !== Auth::id()) {
-            return redirect()->route('products.index')->with('error', 'No tienes permiso para editar este producto');
-        }
+        // Search for the product by user_id and product_id
+        $product = Product::where('user_id', Auth::id())
+            ->where('product_id', $productId)
+            ->firstOrFail();
 
         // Validate the request
         $request->validate([
@@ -128,13 +134,12 @@ class ProductController extends Controller
     }
 
     // Set a product as inactive doing soft delete
-    public function destroy($id)
+    public function destroy($productId)
     {
-        $product = Product::findOrFail($id);
-
-        if ($product->user_id !== auth()->id()) {
-            return redirect()->route('products.index')->with('error', 'No tienes permiso para eliminar este producto');
-        }
+        // Search for the product by user_id and product_id
+        $product = Product::where('user_id', Auth::id())
+            ->where('product_id', $productId)
+            ->firstOrFail();
 
         $product->active = false;
         $product->save();
@@ -143,13 +148,12 @@ class ProductController extends Controller
     }
 
     // Restore a soft-deleted product
-    public function restore($id)
+    public function restore($productId)
     {
-        $product = Product::withoutGlobalScope('active')->findOrFail($id);
-
-        if ($product->user_id !== auth()->id()) {
-            return redirect()->route('products.index')->with('error', 'No tienes permiso para restaurar este producto');
-        }
+        // Search for the product by user_id and product_id
+        $product = Product::where('user_id', Auth::id())
+            ->where('product_id', $productId)
+            ->firstOrFail();
 
         $product->active = true;
         $product->save();

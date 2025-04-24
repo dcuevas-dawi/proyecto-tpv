@@ -44,14 +44,17 @@ class ProductSeeder extends Seeder
         ];
 
         // Create products for the last user (stablishment)
+        $index = 1;
         foreach ($products as $product) {
             Product::create([
                 'user_id' => $user->id,
+                'product_id' => $index,
                 'name' => $product['name'],
                 'description' => $product['description'],
                 'price' => $product['price'],
                 'category' => $product['category'],
             ]);
+            $index++;
         }
     }
 }

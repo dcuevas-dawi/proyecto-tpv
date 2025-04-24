@@ -68,13 +68,13 @@
                                 <div class="p-2 bg-white">
                                     <p class="text-gray-700 mb-2 text-xs">{{ $product->description ?: 'Sin descripción' }}</p>
                                     <div class="flex justify-between">
-                                        <a href="{{ route('products.edit', $product) }}"
+                                        <a href="{{ route('products.edit', $product->product_id) }}"
                                            class="flex items-center justify-center py-1 px-2 bg-green-600 hover:bg-green-700 text-white rounded text-center shadow transition duration-200 text-xs">
                                             <i class="fas fa-edit mr-1"></i> Editar
                                         </a>
 
                                         @if($product->active)
-                                            <form action="{{ route('products.destroy', $product) }}" method="POST" class="inline">
+                                            <form action="{{ route('products.destroy', $product->product_id) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="button" onclick="confirmDelete(this)"
@@ -83,7 +83,7 @@
                                                 </button>
                                             </form>
                                         @else
-                                            <form action="{{ route('products.restore', $product) }}" method="POST" class="inline">
+                                            <form action="{{ route('products.restore', $product->product_id) }}" method="POST" class="inline">
                                                 @csrf
                                                 <button type="button" onclick="confirmRestore(this)"
                                                         class="flex items-center justify-center py-1 px-2 bg-green-600 hover:bg-green-700 text-white rounded text-center shadow transition duration-200 text-xs">

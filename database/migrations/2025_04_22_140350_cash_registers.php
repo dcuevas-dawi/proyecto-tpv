@@ -35,6 +35,13 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // This migration drops the 'cash_registers' table and removes the foreign key constraint from the 'orders' table.
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropForeign(['cash_register_id']);
+            // Opcional: mantener la columna pero sin restricción
+            $table->foreignId('cash_register_id')->nullable()->change();
+        });
+
         Schema::dropIfExists('cash_registers');
     }
 };
