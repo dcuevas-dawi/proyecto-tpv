@@ -78,11 +78,13 @@ class AccountingController extends Controller
         // Query using Eloquent with conditions for SQLite
         $query = Order::where('status', 'cerrado');
 
-        // Adjust the filter dates to include the first hours of the next day
-        $endDateForQuery = Carbon::parse($endDate)->addDay()->format('Y-m-d');
+        // Adjust the filter dates to include the first hours of the next day and
+        // remove the last hours of the previous day
+        $startDateTime = Carbon::parse($startDate)->setTime($cutoffHour, 0, 0);
+        $endDateTime = Carbon::parse($endDate)->addDay()->setTime($cutoffHour, 0, 0);
 
-        $query->whereRaw("strftime('%Y-%m-%d', closed_at) >= ?", [$startDate])
-            ->whereRaw("strftime('%Y-%m-%d', closed_at) <= ?", [$endDateForQuery]);
+        $query->where('closed_at', '>=', $startDateTime)
+            ->where('closed_at', '<', $endDateTime);
 
         $results = $query->selectRaw("{$dateExpression} as period_key")
             ->selectRaw('SUM(total_price) as total_sales')
