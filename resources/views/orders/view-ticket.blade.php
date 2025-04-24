@@ -4,7 +4,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Detalle del Ticket #') . $order->id }}
+                {{ __('Detalle del Ticket #') . $order->order_id }}
             </h2>
         </div>
     </x-slot>
@@ -15,7 +15,7 @@
 
                 <!-- Información del pedido -->
                 <div class="mb-6">
-                    <p class="text-lg"><strong>Ticket #:</strong> {{ $order->id }}</p>
+                    <p class="text-lg"><strong>Ticket #:</strong> {{ $order->order_id }}</p>
                     <p><strong>Mesa:</strong> {{ $order->table->number }}</p>
                     <p><strong>Fecha apertura:</strong> {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y H:i') }}</p>
                     <p><strong>Fecha cierre:</strong> {{ \Carbon\Carbon::parse($order->closed_at)->format('d/m/Y H:i') }}</p>
@@ -55,7 +55,7 @@
                        class="block py-4 bg-green-600 hover:bg-green-700 text-white text-xl rounded-lg shadow text-center w-full sm:w-1/2">
                         <i class="fas fa-arrow-left mr-2"></i> Volver al Historial
                     </a>
-                    <a href="{{ route('orders.print', $order->id) }}" target="_blank"
+                    <a href="{{ route('orders.print', $order->order_id) }}" target="_blank"
                        class="block py-4 bg-green-600 hover:bg-green-700 text-white text-xl rounded-lg shadow text-center w-full sm:w-1/2">
                         <i class="fas fa-print mr-2"></i> Imprimir Ticket
                     </a>

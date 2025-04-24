@@ -114,10 +114,10 @@
         </div>
 
         <div class="ticket-info">
-            <p>FACTURA SIMPLIFICADA: FS-{{ date('Y') }}-{{ $order->id }}</p>
+            <p>FACTURA SIMPLIFICADA: FS-{{ date('Y') }}-{{ $order->order_id }}</p>
             <p>Mesa: {{ $order->table->number }}</p>
             <p>Fecha: {{ $order->updated_at->format('d/m/Y H:i') }}</p>
-            <p>Pedido: #{{ $order->id }}</p>
+            <p>Pedido: #{{ $order->order_id }}</p>
             <p>Le atendió: {{ (session('employee_name')) }}</p>
         </div>
 

@@ -70,7 +70,7 @@
                     <tbody class="text-gray-600">
                     @foreach($orders as $order)
                         <tr class="border-b border-gray-200 hover:bg-gray-50 transition duration-150">
-                            <td class="py-3 px-6 text-left">{{ $order->id }}</td>
+                            <td class="py-3 px-6 text-left">{{ $order->order_id }}</td>
                             <td class="py-3 px-6 text-left">{{ $order->table->number }}</td>
                             <td class="py-3 px-6 text-left">{{ ($order->created_at) }}</td>
                             <td class="py-3 px-6 text-left">{{ ($order->closed_at) }}</td>
@@ -86,11 +86,11 @@
                             </td>
                             <td class="py-3 px-6">
                                 <div class="flex flex-row gap-2 justify-center">
-                                    <a href="{{ route('orders.view', $order->id) }}"
+                                    <a href="{{ route('orders.view', $order->order_id) }}"
                                        class="flex items-center justify-center min-w-[90px] py-2 px-3 bg-green-600 hover:bg-green-700 text-white rounded-md text-center shadow transition duration-200">
                                         <i class="fas fa-eye mr-1"></i> Ver
                                     </a>
-                                    <a href="{{ route('orders.print', $order->id) }}"
+                                    <a href="{{ route('orders.print', $order->order_id) }}"
                                        class="flex items-center justify-center min-w-[110px] py-2 px-3 bg-green-600 hover:bg-green-700 text-white rounded-md text-center shadow transition duration-200" target="_blank">
                                         <i class="fas fa-print mr-1"></i> Imprimir
                                     </a>

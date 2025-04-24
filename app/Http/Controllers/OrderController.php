@@ -38,10 +38,16 @@ class OrderController extends Controller
             $table->status = 1; // 1 = ocupada
             $table->save();
 
+            // Find the last order_id for this user and increment it
+            $lastOrderId = Order::where('user_id', auth()->id())
+                ->max('order_id') ?? 0;
+            $newOrderId = $lastOrderId + 1;
+
             // Create a new order
             Order::create([
                 'table_id' => $table->id,
                 'user_id' => auth()->id(),
+                'order_id' => $newOrderId,
                 'status' => 'abierto',
                 'total_price' => 0,
                 'employee_id' => session('employee_id'),
@@ -136,7 +142,7 @@ class OrderController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Pedido cerrado correctamente',
-            'ticket_url' => route('orders.print', $order->id)
+            'ticket_url' => route('orders.print', $order->order_id)
         ]);
     }
 
@@ -186,9 +192,11 @@ class OrderController extends Controller
     }
 
     // Print ticket for closed order
-    public function printTicket($orderId)
+    public function printTicket($orderIdentifier)
     {
-        $order = Order::findOrFail($orderId);
+        $order = Order::where('user_id', auth()->id())
+            ->where('order_id', $orderIdentifier)
+            ->firstOrFail();
         $stablishmentDetails = auth()->user()->stablishmentDetails;
 
         if ($order->status !== 'cerrado') {
@@ -204,6 +212,7 @@ class OrderController extends Controller
         $today = now()->format('Y-m-d');
 
         $orders = Order::where('status', 'cerrado')
+            ->where('user_id', auth()->id())
             ->whereDate('closed_at', $today)
             ->latest('closed_at')
             ->get();
@@ -227,9 +236,12 @@ class OrderController extends Controller
     }
 
     // View ticket for an order
-    public function viewTicket($orderId)
+    public function viewTicket($orderIdentifier)
     {
-        $order = Order::with(['products', 'table', 'employee'])->findOrFail($orderId);
+        $order = Order::with(['products', 'table', 'employee'])
+            ->where('user_id', auth()->id())
+            ->where('order_id', $orderIdentifier)
+            ->firstOrFail();
         return view('orders.view-ticket', compact('order'));
     }
 }
