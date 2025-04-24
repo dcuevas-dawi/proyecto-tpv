@@ -75,8 +75,9 @@ class AccountingController extends Controller
                 break;
         }
 
-        // Query using Eloquent with conditions for SQLite
-        $query = Order::where('status', 'cerrado');
+        // Query to get sales filtered by stablishment
+        $query = Order::where('status', 'cerrado')
+            ->where('user_id', auth()->id());
 
         // Adjust the filter dates to include the first hours of the next day and
         // remove the last hours of the previous day
