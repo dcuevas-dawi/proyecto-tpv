@@ -80,7 +80,7 @@ class OrderController extends Controller
         $product = Product::findOrFail($request->product_id);
 
         // Check if the product is in the current order
-        $existingProduct = $order->products()->where('product_id', $product->id)->first();
+        $existingProduct = $order->products()->where('order_product.product_id', $product->id)->first();
 
         if ($existingProduct) {
             // If the product is already in the order, update the quantity
@@ -149,7 +149,7 @@ class OrderController extends Controller
 
         $order = Order::findOrFail($orderId);
 
-        if (!$order->products()->where('product_id', $productId)->exists()) {
+        if (!$order->products()->wherePivot('product_id', $productId)->exists()) {
             return redirect()->back()->with('error', 'El producto no está en el pedido');
         }
 
@@ -171,7 +171,7 @@ class OrderController extends Controller
     {
         $order = Order::findOrFail($orderId);
 
-        if (!$order->products()->where('product_id', $productId)->exists()) {
+        if (!$order->products()->wherePivot('product_id', $productId)->exists()) {
             return redirect()->back()->with('error', 'El producto no está en el pedido');
         }
 
