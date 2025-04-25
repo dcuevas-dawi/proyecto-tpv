@@ -2,7 +2,7 @@
 
 <x-app-layout>
     <div class="container mx-auto p-6">
-        <h2 class="text-3xl font-bold mb-6">Gestión de Mesas</h2>
+        <h2 class="text-4xl font-bold text-center mb-8">Gestión de Mesas</h2>
 
         @if(session('success'))
             <div class="mb-4 p-4 bg-green-100 text-green-800 rounded">

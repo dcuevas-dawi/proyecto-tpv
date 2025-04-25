@@ -2,7 +2,7 @@
 
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="text-4xl font-bold text-center mb-8 py-6">
             Identificación de empleado
         </h2>
     </x-slot>

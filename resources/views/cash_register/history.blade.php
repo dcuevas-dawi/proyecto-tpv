@@ -1,11 +1,11 @@
 <!-- View for recovering the history of cash registers -->
 
 <x-app-layout>
-    <div class="py-2">
+    <div class="py-6">
         <div class="max-w-full mx-auto px-3 lg:px-4">
-            <h1 class="text-2xl font-bold text-center text-gray-800 mb-3">
-                Historial de Caja
-            </h1>
+            <h2 class="text-4xl font-bold text-center mb-8">
+                Historial de Cajas
+            </h2>
 
             <div class="bg-white shadow-md rounded-lg overflow-hidden">
                 @if(session('success'))

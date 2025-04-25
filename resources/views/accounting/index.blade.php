@@ -1,9 +1,9 @@
 <!-- View for accounting -->
 
 <x-app-layout>
-    <div class="w-full h-auto p-6 bg-gray-100">
+    <div class="w-full h-auto py-6 bg-gray-100">
         <div class="flex items-center justify-center mb-6">
-            <h1 class="text-4xl font-bold text-gray-800">Contabilidad</h1>
+            <h2 class="text-4xl font-bold text-center mb-8">Contabilidad</h2>
         </div>
 
         <div class="">

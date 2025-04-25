@@ -1,9 +1,9 @@
 <!-- VIew for creating a new employee -->
 
 <x-app-layout>
-    <div class="w-full h-auto p-6 bg-gray-100">
+    <div class="w-full h-auto py-6 bg-gray-100">
         <div class="flex items-center justify-center mb-6">
-            <h1 class="text-3xl font-semibold text-gray-800">Crear Nuevo Empleado</h1>
+            <h2 class="text-4xl font-bold text-center mb-8">Crear Nuevo Empleado</h2>
         </div>
 
         <div class="max-w-xl mx-auto bg-white rounded-lg shadow-lg p-6 mb-6">

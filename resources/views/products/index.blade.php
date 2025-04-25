@@ -1,9 +1,9 @@
 <!-- View for list all products, with filters and actions -->
 
 <x-app-layout>
-    <div class="w-full h-auto p-4 bg-gray-100">
+    <div class="w-full h-auto py-6 bg-gray-100">
         <div class="flex items-center justify-center mb-4">
-            <h1 class="text-3xl font-semibold text-gray-800">Gestión de Productos</h1>
+            <h2 class="text-4xl font-bold text-center mb-8">Gestión de Productos</h2>
         </div>
 
         <div class="w-full mx-auto">
