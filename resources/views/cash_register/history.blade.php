@@ -42,52 +42,65 @@
                 </div>
 
                 <!-- Historical table -->
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-100">
-                        <tr>
-                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha apertura</th>
-                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hora apertura</th>
-                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha cierre</th>
-                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hora cierre</th>
-                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Empleado</th>
-                            <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Caja inicial</th>
-                            <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Caja final</th>
-                            <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Diferencia</th>
-                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
-                        </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                        @forelse ($cashRegisters ?? [] as $register)
-                            <tr class="hover:bg-gray-50 transition-colors duration-200">
-                                <td class="px-3 py-2 whitespace-nowrap">{{ date('d/m/Y', strtotime($register->opened_at)) }}</td>
-                                <td class="px-3 py-2 whitespace-nowrap">{{ date('H:i', strtotime($register->opened_at)) }}</td>
-                                <td class="px-3 py-2 whitespace-nowrap">{{ $register->closed_at ? date('d/m/Y', strtotime($register->closed_at)) : '-' }}</td>
-                                <td class="px-3 py-2 whitespace-nowrap">{{ $register->closed_at ? date('H:i', strtotime($register->closed_at)) : '-' }}</td>
-                                <td class="px-3 py-2 whitespace-nowrap">{{ $register->openingEmployee ? $register->openingEmployee->name : 'Sin empleado' }}</td>
-                                <td class="px-3 py-2 text-right whitespace-nowrap">{{ number_format($register->opening_amount, 2) }} €</td>
-                                <td class="px-3 py-2 text-right whitespace-nowrap">{{ $register->real_closing_amount ? number_format($register->real_closing_amount, 2) . ' €' : '-' }}</td>
-                                <td class="px-3 py-2 text-right whitespace-nowrap {{ $register->difference && $register->difference < 0 ? 'text-red-600 font-medium' : 'text-green-600 font-medium' }}">
-                                    {{ $register->difference ? number_format($register->difference, 2) . ' €' : '-' }}
-                                </td>
-                                <td class="px-3 py-2 whitespace-nowrap">
-                                    @if($register->closed_at)
-                                        <span class="px-2 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Cerrada</span>
-                                    @else
-                                        <span class="px-2 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Abierta</span>
-                                    @endif
-                                </td>
-                            </tr>
-                        @empty
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-100">
                             <tr>
-                                <td colspan="9" class="px-3 py-4 text-center text-gray-500">
-                                    No hay registros de caja para mostrar
-                                </td>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha apertura</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hora apertura</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Empleado apertura</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha cierre</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hora cierre</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Empleado cierre</th>
+                                <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Caja inicial</th>
+                                <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Caja final</th>
+                                <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Descuadre</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                                <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Comentario</th>
                             </tr>
-                        @endforelse
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                            @forelse ($cashRegisters ?? [] as $register)
+                                <tr class="hover:bg-gray-50 transition-colors duration-200">
+                                    <td class="px-3 py-2 whitespace-nowrap">{{ date('d/m/Y', strtotime($register->opened_at)) }}</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">{{ date('H:i', strtotime($register->opened_at)) }}</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">{{ $register->openingEmployee ? $register->openingEmployee->name : 'Sin empleado' }}</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">{{ $register->closed_at ? date('d/m/Y', strtotime($register->closed_at)) : '-' }}</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">{{ $register->closed_at ? date('H:i', strtotime($register->closed_at)) : '-' }}</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">{{ $register->closingEmployee ? $register->closingEmployee->name : '-' }}</td>
+                                    <td class="px-3 py-2 text-right whitespace-nowrap">{{ number_format($register->opening_amount, 2) }} €</td>
+                                    <td class="px-3 py-2 text-right whitespace-nowrap">{{ $register->real_closing_amount ? number_format($register->real_closing_amount, 2) . ' €' : '-' }}</td>
+                                    <td class="px-3 py-2 text-right whitespace-nowrap {{ $register->difference && $register->difference < 0 ? 'text-red-600 font-medium' : 'text-green-600 font-medium' }}">
+                                        {{ $register->difference ? number_format($register->difference, 2) . ' €' : '-' }}
+                                    </td>
+                                    <td class="px-3 py-2 whitespace-nowrap">
+                                        @if($register->closed_at)
+                                            <span class="px-2 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Cerrada</span>
+                                        @else
+                                            <span class="px-2 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Abierta</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-3 py-2 text-center whitespace-nowrap">
+                                        @if($register->comments)
+                                            <button class="comment-icon text-green-600 hover:text-green-700"
+                                                    data-comment="{{ htmlspecialchars($register->comments) }}">
+                                                <i class="fas fa-comment-alt"></i>
+                                            </button>
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="11" class="px-3 py-4 text-center text-gray-500">
+                                        No hay registros de caja para mostrar
+                                    </td>
+                                </tr>
+                            @endforelse
+                            </tbody>
+                        </table>
+                    </div>
 
                 <!-- Pagination, if exists -->
                 @if(isset($cashRegisters) && $cashRegisters->hasPages())
@@ -110,5 +123,27 @@
                 </div>
             </div>
         </div>
+        <!-- Modal for comments -->
+        <div id="commentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 relative">
+                <div class="p-4 border-b border-gray-200">
+                    <h3 class="text-lg font-medium text-gray-900">Comentario de cierre</h3>
+                    <button id="closeModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-500">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="p-4">
+                    <p id="commentText" class="text-gray-600"></p>
+                </div>
+                <div class="bg-gray-50 p-3 flex justify-end rounded-b-lg">
+                    <button id="closeModalButton" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
+    @push('scripts')
+        <script src="{{ asset('js/cash_registers.js') }}"></script>
+    @endpush
 </x-app-layout>
