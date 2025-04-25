@@ -13,6 +13,16 @@ class FirstEmployeeSetupController extends Controller
     // Show the form to create the first employee (owner)
     public function showOwnerForm()
     {
+        // Chesk if there is already an employee with role=1 (owner)
+        $ownerExists = Employee::where('user_id', auth()->id())
+            ->where('role', 1)
+            ->exists();
+
+        // If an owner already exists, redirect with an error message
+        if ($ownerExists) {
+            return redirect()->route('menu')
+                ->with('error', 'Ya existe un dueño para este establecimiento.');
+        }
         return view('employee.create_owner');
     }
 

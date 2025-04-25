@@ -58,6 +58,14 @@ class EmployeeLoginController extends Controller
     // Show the form to create a new employee
     public function create()
     {
+        // Check if the user is the owner (role=1)
+        $isOwner = session('employee_role') == 1;
+
+        // If the user is not the owner, redirect to the menu with an error message
+        if (!$isOwner) {
+            return redirect()->route('menu')->with('error', 'Solo el dueño puede crear empleados.');
+        }
+        // Check if there is already an employee with role=1 (owner)
         $employees = Employee::where('user_id', Auth::id())->get();
 
         return view('employee.create', compact('employees'));

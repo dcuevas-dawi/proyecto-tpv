@@ -2,7 +2,7 @@
 
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="text-4xl font-bold text-center mb-8">
             Crear Dueño
         </h2>
     </x-slot>
@@ -39,21 +39,21 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Nombre del dueño</label>
-                        <input type="text" name="name" required class="block w-full border-gray-300 rounded-md" />
+                        <input type="text" name="name" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-2 focus:ring-green-600 focus:border-green-600" />
                     </div>
 
                     <div class="mt-4">
                         <label class="block text-sm font-medium text-gray-700 mb-1">PIN</label>
-                        <input type="password" name="pin" required class="block w-full border-gray-300 rounded-md" />
+                        <input type="password" name="pin" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-2 focus:ring-green-600 focus:border-green-600" />
                     </div>
 
                     <div class="mt-4">
                         <label class="block text-sm font-medium text-gray-700 mb-1">Confirmar PIN</label>
-                        <input type="password" name="pin_confirmation" required class="block w-full border-gray-300 rounded-md" />
+                        <input type="password" name="pin_confirmation" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-2 focus:ring-green-600 focus:border-green-600" />
                     </div>
 
                     <div class="mt-6">
-                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md">
+                        <button type="submit" class="bg-green-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-green-700 transition duration-200">
                             Crear dueño
                         </button>
                     </div>
