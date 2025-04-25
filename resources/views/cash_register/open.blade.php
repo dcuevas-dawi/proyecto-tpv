@@ -65,6 +65,6 @@
     </div>
 
     @push('scripts')
-        <script src="{{ asset('js/cash_register.js') }}"></script>
+        <script src="{{ asset('js/cash_register_open.js') }}"></script>
     @endpush
 </x-app-layout>

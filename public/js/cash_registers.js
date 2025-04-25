@@ -1,3 +1,4 @@
+// Logic for handling the cash register modal and comment functionality.
 document.addEventListener('DOMContentLoaded', function() {
     // Get modal elements
     const modal = document.getElementById('commentModal');
