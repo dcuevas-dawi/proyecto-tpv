@@ -19,7 +19,7 @@ class HistoricalOrdersSeeder extends Seeder
     {
         // Custom configuration
         $user = User::latest()->first(); // Last created user id (stablishment)
-        $daysBack = 365; // Backwards days to generate orders
+        $daysBack = 10; // Backwards days to generate orders
         $minOrdersPerDay = 2; // Minium orders per day
         $maxOrdersPerDay = 8; // Maxium orders per day
         $minProductsPerOrder = 1; //Minium products per order
@@ -218,10 +218,11 @@ class HistoricalOrdersSeeder extends Seeder
         try {
             // Create the order
             $orderId = DB::table('orders')->insertGetId([
+                'order_id' => DB::table('orders')->where('user_id', $user->id)->max('order_id') + 1,
                 'table_id' => $table->id,
                 'user_id' => $user->id,
                 'employee_id' => $employeeId,
-                'cash_register_id' => $cashRegisterId, // Asociar a la caja
+                'cash_register_id' => $cashRegisterId,
                 'status' => 'cerrado',
                 'total_price' => 0,
                 'created_at' => $createdAt,
@@ -236,7 +237,8 @@ class HistoricalOrdersSeeder extends Seeder
 
             foreach ($selectedProducts as $product) {
                 // Check if the product exists
-                if (!Product::find($product->id)) {
+                $actualProduct = Product::find($product->id);
+                if (!$actualProduct) {
                     continue;
                 }
 
