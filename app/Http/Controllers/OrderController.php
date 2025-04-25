@@ -227,6 +227,7 @@ class OrderController extends Controller
         $end_date = $request->input('end_date') ?? $start_date;
 
         $orders = Order::where('status', 'cerrado')
+            ->where('user_id', auth()->id())
             ->whereDate('closed_at', '>=', $start_date)
             ->whereDate('closed_at', '<=', $end_date)
             ->latest('closed_at')
