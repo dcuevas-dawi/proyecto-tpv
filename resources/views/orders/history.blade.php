@@ -31,7 +31,7 @@
 
                     @if(isset($orders) && $orders->count() > 0)
                         <div>
-                            <a href="{{ route('orders.print', $orders->first()->id) }}" target="_blank"
+                            <a href="{{ route('orders.print', $orders->first()->order_id) }}" target="_blank"
                                class="inline-block bg-green-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-green-700 transition duration-200">
                                 <i class="fas fa-print mr-1"></i> Imprimir último ticket
                             </a>
