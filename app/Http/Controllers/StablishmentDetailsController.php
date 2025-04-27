@@ -12,6 +12,11 @@ class StablishmentDetailsController extends Controller
     // Show the form to edit stablishment details
     public function edit()
     {
+        // Check access permissions
+        if (session('employee_role') != 1) {
+            abort(403, 'Acceso no autorizado');
+        }
+
         $user = Auth::user();
 
         if ($user->stablishmentDetails) {

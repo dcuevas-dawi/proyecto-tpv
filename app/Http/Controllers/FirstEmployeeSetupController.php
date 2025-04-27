@@ -19,10 +19,10 @@ class FirstEmployeeSetupController extends Controller
             ->exists();
 
         // If an owner already exists, redirect with an error message
-        if ($ownerExists) {
-            return redirect()->route('menu')
-                ->with('error', 'Ya existe un dueño para este establecimiento.');
+        if (session('employee_role') != 1) {
+            abort(403, 'Acceso no autorizado');
         }
+
         return view('employee.create_owner');
     }
 

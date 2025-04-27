@@ -12,6 +12,11 @@ class AccountingController extends Controller
     // Show the accounting report form
     public function index()
     {
+        // Check access permissions
+        if (session('employee_role') != 1) {
+            abort(403, 'Acceso no autorizado');
+        }
+
         // Get actual date
         $today = now()->format('Y-m-d');
         $startDate = $today;
@@ -26,6 +31,10 @@ class AccountingController extends Controller
     // Process the accounting report
     public function report(Request $request)
     {
+        // Check access permissions
+        if (session('employee_role') != 1) {
+            abort(403, 'Acceso no autorizado');
+        }
         $request->validate([
             'period' => 'required|in:daily,weekly,monthly,quarterly,yearly',
             'start_date' => 'required|date',

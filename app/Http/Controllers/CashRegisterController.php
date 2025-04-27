@@ -12,6 +12,11 @@ class CashRegisterController extends Controller
     // Show form to open cash register
     public function openForm()
     {
+        // Check access permissions
+        if (session('employee_role') != 1 && session('employee_role') != 2) {
+            abort(403, 'Acceso no autorizado');
+        }
+
         // Check if there is already an open cash register
         $existingOpenCashRegister = CashRegister::where('user_id', auth()->id())
             ->where('status', 'open')
@@ -55,6 +60,11 @@ class CashRegisterController extends Controller
     // Show form to close cash register
     public function closeForm()
     {
+        // Check access permissions
+        if (session('employee_role') != 1 && session('employee_role') != 2) {
+            abort(403, 'Acceso no autorizado');
+        }
+
         // Get the current open cash register
         $cashRegister = CashRegister::where('user_id', auth()->id())
             ->where('status', 'open')
@@ -134,6 +144,11 @@ class CashRegisterController extends Controller
     // List cash register history
     public function history(Request $request)
     {
+        // Check access permissions
+        if (session('employee_role') != 1 && session('employee_role') != 2) {
+            abort(403, 'Acceso no autorizado');
+        }
+
         $query = CashRegister::where('user_id', auth()->id());
 
         // Establish default dates if not provided

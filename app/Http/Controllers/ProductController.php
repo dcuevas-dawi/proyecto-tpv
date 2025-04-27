@@ -12,6 +12,11 @@ class ProductController extends Controller
     // Show all products or filtered products
     public function index(Request $request)
     {
+        // Check access permissions
+        if (session('employee_role') != 1 && session('employee_role') != 2) {
+            abort(403, 'Acceso no autorizado');
+        }
+
         $filter = $request->input('filter', 'all');
         $query = Product::where('user_id', auth()->id());
 
@@ -45,12 +50,22 @@ class ProductController extends Controller
     // Show the form to create a new product
     public function create()
     {
+        // Check access permissions
+        if (session('employee_role') != 1 && session('employee_role') != 2) {
+            abort(403, 'Acceso no autorizado');
+        }
+
         return view('products.create');
     }
 
     // Store a new product
     public function store(Request $request)
     {
+        // Check access permissions
+        if (session('employee_role') != 1 && session('employee_role') != 2) {
+            abort(403, 'Acceso no autorizado');
+        }
+
         // Validate the request
         $request->validate([
             'name' => 'required|string|max:100',
@@ -89,6 +104,11 @@ class ProductController extends Controller
     // Show the form to edit a product
     public function edit($productId)
     {
+        // Check access permissions
+        if (session('employee_role') != 1 && session('employee_role') != 2) {
+            abort(403, 'Acceso no autorizado');
+        }
+
         // Search for the product by user_id and product_id
         $product = Product::where('user_id', Auth::id())
             ->where('product_id', $productId)

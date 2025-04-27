@@ -21,9 +21,6 @@
                 Mesas
             </a>
 
-            <a href="{{ route('cash-register.history') }}" class="block py-2 px-4 rounded {{ request()->routeIs('cash-register.*') ? 'bg-primary text-white' : 'hover:bg-gray-100' }}">
-                Caja
-            </a>
 
             <a href="{{ route('orders.history') }}" class="block py-2 px-4 rounded {{ request()->routeIs('orders.*') ? 'bg-primary text-white' : 'hover:bg-gray-100' }}">
                 Tickets
@@ -31,6 +28,10 @@
 
             <!-- Check if the user is an employee or owner -->
             @if(session('employee_role') == 2 || session('employee_role') == 1)
+                <a href="{{ route('cash-register.history') }}" class="block py-2 px-4 rounded {{ request()->routeIs('cash-register.*') ? 'bg-primary text-white' : 'hover:bg-gray-100' }}">
+                    Caja
+                </a>
+
                 <a href="{{ route('products.index') }}" class="block py-2 px-4 rounded {{ request()->routeIs('products.*') ? 'bg-primary text-white' : 'hover:bg-gray-100' }}">
                     Productos
                 </a>
