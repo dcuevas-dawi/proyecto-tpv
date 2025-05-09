@@ -6,6 +6,12 @@
             <h1 class="text-4xl font-bold text-gray-800">Historial de Tickets</h1>
         </div>
 
+        @if(session('error'))
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-2 mb-2" role="alert">
+                <p>{{ session('error') }}</p>
+            </div>
+        @endif
+
         <div class="mb-6">
             <form action="{{ route('orders.byDate') }}" method="GET">
                 <div class="flex items-end justify-between gap-4">

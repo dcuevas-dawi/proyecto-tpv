@@ -6,6 +6,16 @@
             <h2 class="text-4xl font-bold text-center mb-8">Contabilidad</h2>
         </div>
 
+        @if($errors->any())
+        <div class="mt-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded" role="alert">
+            <ul>
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
         <div class="">
             <form id="accountingForm" action="{{ route('accounting.report') }}" method="GET" class="p-6">
                 <div class="grid grid-cols-4 gap-4">

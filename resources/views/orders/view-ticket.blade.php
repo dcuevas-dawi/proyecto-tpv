@@ -13,7 +13,7 @@
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
 
-                <!-- Información del pedido -->
+                <!-- Order information -->
                 <div class="mb-6">
                     <p class="text-lg"><strong>Ticket #:</strong> {{ $order->order_id }}</p>
                     <p><strong>Mesa:</strong> {{ $order->table->number }}</p>
@@ -22,7 +22,7 @@
                     <p><strong>Atendido por:</strong> {{ $order->employee->name ?? 'No especificado' }}</p>
                 </div>
 
-                <!-- Productos -->
+                <!-- Products table -->
                 <table class="w-full mb-6">
                     <thead>
                     <tr class="border-b-2 border-gray-200 text-left">
@@ -49,7 +49,7 @@
                     <p>TOTAL: {{ number_format($order->total_price, 2) }} €</p>
                 </div>
 
-                <!-- Botón para volver y para imprimir -->
+                <!-- Return and Print buttons -->
                 <div class="text-center mt-8 flex flex-col sm:flex-row gap-4 justify-center">
                     <a href="{{ route('orders.history') }}"
                        class="block py-4 bg-green-600 hover:bg-green-700 text-white text-xl rounded-lg shadow text-center w-full sm:w-1/2">

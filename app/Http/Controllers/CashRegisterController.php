@@ -155,6 +155,10 @@ class CashRegisterController extends Controller
         $startDate = $request->start_date ?? Carbon::now()->subDays(7)->format('Y-m-d');
         $endDate = $request->end_date ?? Carbon::now()->format('Y-m-d');
 
+        if($startDate > $endDate) {
+            return redirect()->route('cash-register.history')->with('error', 'La fecha inicial no puede ser superior a la fecha final');
+        }
+
         // Extend the end date to include the next day (till 05:59:59)
         $endDatePlus = Carbon::parse($endDate)->addDay()->format('Y-m-d');
 

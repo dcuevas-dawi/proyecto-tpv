@@ -226,6 +226,11 @@ class OrderController extends Controller
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date') ?? $start_date;
 
+        if($start_date > $end_date) {
+            return redirect()->route('orders.history')
+                ->with('error', 'La fecha inicial no puede superior a la fecha final.');
+        }
+
         $orders = Order::where('status', 'cerrado')
             ->where('user_id', auth()->id())
             ->whereDate('closed_at', '>=', $start_date)

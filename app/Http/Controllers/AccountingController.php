@@ -39,6 +39,8 @@ class AccountingController extends Controller
             'period' => 'required|in:daily,weekly,monthly,quarterly,yearly',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
+        ], [
+            'end_date.after_or_equal' => 'La fecha inicial no puede ser superior a la fecha final'
         ]);
 
         $startDate = $request->input('start_date');
