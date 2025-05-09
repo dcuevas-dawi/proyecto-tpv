@@ -122,13 +122,11 @@ class OrderController extends Controller
 
         // If not open order, return error
         if (!$order) {
-            return response()->json([
-                'success' => false,
-                'message' => 'No hay un pedido abierto para esta mesa'
-            ]);
+            return redirect()->route('tables.index')
+                ->with('error', 'No hay un pedido abierto para esta mesa');
         }
 
-        // Taable is now free
+        // Table is now free
         $table->status = 0; // 0 = libre
         $table->save();
 
@@ -138,12 +136,9 @@ class OrderController extends Controller
         $order->status = 'cerrado';
         $order->save();
 
-        // Return JSON response with the ticket URL
-        return response()->json([
-            'success' => true,
-            'message' => 'Pedido cerrado correctamente',
-            'ticket_url' => route('orders.print', $order->order_id)
-        ]);
+        // Redirect with success message
+        return redirect()->route('tables.index')
+            ->with('success', "Pedido {$order->order_id} cerrado correctamente");
     }
 
     // Update product quantity in order
@@ -198,10 +193,6 @@ class OrderController extends Controller
             ->where('order_id', $orderIdentifier)
             ->firstOrFail();
         $stablishmentDetails = auth()->user()->stablishmentDetails;
-
-        if ($order->status !== 'cerrado') {
-            return redirect()->back()->with('error', 'Solo se pueden imprimir tickets de pedidos cerrados');
-        }
 
         return view('orders.ticket', compact('order', 'stablishmentDetails'));
     }

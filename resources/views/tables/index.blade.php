@@ -4,6 +4,18 @@
     <div class="container mx-auto p-6">
         <h2 class="text-4xl font-bold text-center mb-8">Mesas Disponibles</h2>
 
+        @if(session('success'))
+            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded" role="alert">
+                <p>{{ session('success') }}</p>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded" role="alert">
+                <p>{{ session('error') }}</p>
+            </div>
+        @endif
+
         <div class="grid grid-cols-4 gap-6">
             @foreach ($tables as $table)
                 <a href="{{ route('tables.show', $table->number)}}">

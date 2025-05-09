@@ -152,6 +152,10 @@
                         </div>
                     </div>
 
+                    <a href="{{ route('orders.print', $order->order_id) }}" target="_blank" class="w-full py-4 bg-green-600 hover:bg-green-700 text-white text-lg font-semibold rounded-lg shadow transition duration-300 text-center flex items-center justify-center">
+                        Imprimir Ticket
+                    </a>
+
                     <form action="{{ route('tables.closeOrder', $table->id) }}" method="POST" id="closeOrderForm" class="mt-4">
                         @csrf
                         <button type="submit" class="w-full py-4 bg-green-600 hover:bg-green-700 text-white text-lg font-semibold rounded-lg shadow transition duration-300">

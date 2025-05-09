@@ -3,9 +3,9 @@
 <x-app-layout>
     <div class="py-2">
         <div class="max-w-full mx-auto px-4">
-            <h1 class="text-2xl font-bold text-center text-gray-800 mb-3">
+            <h2 class="text-4xl font-bold text-center mb-8">
                 Cierre de Caja
-            </h1>
+            </h2>
 
             <div class="bg-white shadow-md rounded-lg overflow-hidden">
                 @if(session('error'))
