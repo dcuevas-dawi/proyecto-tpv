@@ -19,7 +19,7 @@ class FirstEmployeeSetupController extends Controller
             ->exists();
 
         // If an owner already exists, redirect with an error message
-        if (session('employee_role') != 1) {
+        if ($ownerExists) {
             abort(403, 'Acceso no autorizado');
         }
 
