@@ -91,12 +91,12 @@
             @endif
 
             <!-- Right panel: Order list -->
-            <div class="w-1/3 bg-white p-4 rounded-lg shadow-lg">
+            <div class="w-1/3 bg-white p-4 rounded-lg shadow-lg max-h-max">
                 <h2 class="text-2xl font-semibold text-gray-700 mb-3">Pedido Actual</h2>
 
                 @if ($order && $order->status == 'abierto')
                     <div class="space-y-4 mb-4">
-                        <ul class="space-y-2 max-h-[68vh] overflow-y-auto">
+                        <ul class="space-y-2 max-h-[55vh] overflow-y-auto">
                             @foreach ($order->products as $product)
                                 <li class="bg-gray-100 rounded-lg p-3 shadow">
                                     <div class="flex justify-between items-center mb-2">
