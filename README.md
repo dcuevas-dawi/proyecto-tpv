@@ -30,11 +30,11 @@ Este proyecto consiste en el desarrollo de una aplicación web que actúa como T
 
 | Herramienta         | Uso principal                      |
 |---------------------|-------------------------------------|
-| Laravel 12          | Backend y lógica de negocio         |
+| Laravel 12          | Backend         |
 | Blade + TailwindCSS | Frontend       |
-| SQLite              | Base de datos ligera                |
+| SQLite              | Base de datos                |
 | Nginx               | Servidor web en producción          |
-| Azure (VM Ubuntu)   | Hosting con certificado SSL         |
+| Azure (VM Ubuntu)   | Hosting          |
 | Git / GitHub        | Control de versiones                |
 
 ---
