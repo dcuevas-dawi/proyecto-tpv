@@ -1,4 +1,4 @@
-# 🧾 Sistema TPV D.C. – Proyecto Final DAW
+# 🧾 TPV D.C. – Proyecto Final DAW
 
 **Desarrollado por: Daniel Cuevas Naharro**  
 **Curso 2024-2025 – CIFP Francesc de Borja Moll**  
