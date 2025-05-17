@@ -54,7 +54,7 @@ Este proyecto consiste en el desarrollo de una aplicación web que actúa como T
 
 ## 📄 **Documentación ampliada**
 
-Toda la información técnica detallada, capturas, casos de uso y plan de pruebas está disponible en el archivo:
+La documentación completa del proyecto está disponible en el archivo:
 
 📘 **[Documentacion.pdf](Documentacion.pdf)**
 
