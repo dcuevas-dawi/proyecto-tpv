@@ -57,6 +57,6 @@ Este proyecto consiste en el desarrollo de una aplicación web que actúa como T
 
 La documentación completa del proyecto está disponible en el archivo:
 
-📘 **[Documentacion.pdf](Documentacion.pdf)**
+📘 **[Documentación TPV - Daniel Cuevas](Documentación%20TPV%20-%20Daniel%20Cuevas.pdf)**
 
 ---
