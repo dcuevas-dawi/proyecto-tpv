@@ -4,7 +4,8 @@
 **Curso 2024-2025 – CIFP Francesc de Borja Moll**  
 **Repositorio:** [github.com/dcuevas-dawi/proyecto-tpv](https://github.com/dcuevas-dawi/proyecto-tpv)  
 **Versión MVP en producción:** [www.tpv-dc.com](https://www.tpv-dc.com)
-**Documentación ampliada**[Documentación TPV - Daniel Cuevas.pdf](Documentación TPV - Daniel Cuevas.pdf)
+
+**Documentación ampliada** [Documentación TPV - Daniel Cuevas.pdf](Documentación TPV - Daniel Cuevas.pdf)
 
 ---
 
